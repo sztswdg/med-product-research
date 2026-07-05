@@ -1,0 +1,872 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>医药产品智能调研平台</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8f0fe;
+    --primary-dark: #0f3b9c;
+    --success: #059669;
+    --success-light: #ecfdf5;
+    --warning: #d97706;
+    --warning-light: #fffbeb;
+    --danger: #dc2626;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,.08), 0 4px 10px rgba(0,0,0,.04);
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0f3b9c 0%, #1a56db 50%, #2563eb 100%);
+    color: #fff;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display:flex; align-items:center; gap:12px; }
+  .header-logo {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,.18);
+    border-radius: var(--radius);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 20px;
+  }
+  .header-title { font-size:18px; font-weight:600; letter-spacing: .5px; }
+  .header-subtitle { font-size:12px; opacity: .75; }
+  .header-right { display:flex; align-items:center; gap:16px; }
+  .status-dot { width:8px; height:8px; border-radius:50%; background:#4ade80; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .status-text { font-size:13px; opacity:.85; }
+
+  /* Layout */
+  .main-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: 340px 1fr 380px;
+    gap: 20px;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .card-header-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-body { padding: 16px 20px; }
+  .card-body-no-pad { padding: 0; }
+
+  /* Tabs */
+  .tabs {
+    display:flex;
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 3px;
+  }
+  .tab-btn {
+    flex:1;
+    padding:8px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:500;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: #fff;
+    color: var(--primary);
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  /* Buttons */
+  .btn {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 16px;
+    border:none;
+    border-radius:6px;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color:#fff;
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform:translateY(-1px); box-shadow:0 2px 8px rgba(26,86,219,.35); }
+  .btn-success {
+    background: var(--success);
+    color:#fff;
+  }
+  .btn-success:hover { background: #047857; }
+  .btn-outline {
+    background: #fff;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+  .btn-outline:hover { background: var(--primary-light); }
+  .btn-sm { padding:5px 10px; font-size:12px; }
+  .btn-block { width:100%; justify-content:center; }
+
+  /* Form */
+  .form-group { margin-bottom: 14px; }
+  .form-label { display:block; font-size:13px; font-weight:500; color:var(--text); margin-bottom:5px; }
+  .form-input, .form-select, .form-textarea {
+    width:100%;
+    padding:8px 12px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:13px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+    transition: border-color .2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,86,219,.1);
+  }
+  .form-textarea { resize:vertical; min-height:80px; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; max-height: 600px; overflow-y: auto; }
+  table {
+    width:100%;
+    border-collapse: collapse;
+    font-size:13px;
+  }
+  thead { position:sticky; top:0; z-index:1; }
+  th {
+    background: #f8fafc;
+    padding:10px 12px;
+    text-align:left;
+    font-weight:600;
+    color: var(--text-secondary);
+    border-bottom:2px solid var(--border);
+    white-space: nowrap;
+    font-size:12px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+  }
+  td {
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:hover td { background: var(--primary-light); }
+  .badge {
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:12px;
+    font-size:11px;
+    font-weight:500;
+  }
+  .badge-new { background: #dbeafe; color: #1e40af; }
+  .badge-done { background: #d1fae5; color: #065f46; }
+  .badge-pending { background: #fef3c7; color: #92400e; }
+
+  /* Research card */
+  .research-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .research-item:last-child { border-bottom: none; }
+  .research-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .research-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .research-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom: 8px; }
+  .tag {
+    padding:2px 8px;
+    border-radius:4px;
+    font-size:11px;
+    background: #f1f5f9;
+    color: #475569;
+  }
+  .research-summary {
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.6;
+    background: #f8fafc;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary);
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-value { font-size: 26px; font-weight:700; color: var(--primary); }
+  .stat-label { font-size: 12px; color: var(--text-secondary); margin-top:2px; }
+
+  /* Progress */
+  .progress-bar {
+    height: 4px;
+    background: var(--bg);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    display:inline-block;
+    width:16px; height:16px;
+    border:2px solid rgba(255,255,255,.3);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation: spin .6s linear infinite;
+  }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* Empty state */
+  .empty-state {
+    text-align:center;
+    padding:40px 20px;
+    color: var(--text-secondary);
+  }
+  .empty-icon { font-size:40px; margin-bottom:12px; opacity:.4; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    font-size:13px;
+    font-weight:500;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideIn .3s ease;
+  }
+  .toast.success { border-left: 4px solid var(--success); }
+  .toast.error { border-left: 4px solid var(--danger); }
+  @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .main-container { grid-template-columns: 1fr; }
+  }
+
+  /* Log area */
+  .log-area {
+    background: #0f172a;
+    color: #94a3b8;
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+    font-size: 12px;
+    padding: 12px;
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    line-height: 1.8;
+  }
+  .log-line { }
+  .log-line.success { color: #4ade80; }
+  .log-line.warn { color: #fbbf24; }
+  .log-line.error { color: #f87171; }
+  .log-line.info { color: #60a5fa; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo">💊</div>
+    <div>
+      <div class="header-title">医药产品智能调研平台</div>
+      <div class="header-subtitle">Medical Product Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <span class="status-text">系统就绪 · 数据源正常</span>
+    <span style="font-size:12px;opacity:.6;">2026-07-05</span>
+  </div>
+</header>
+
+<!-- Main Grid -->
+<div class="main-container">
+
+  <!-- Left Panel: Data Crawling -->
+  <div class="card" style="display:flex;flex-direction:column;">
+    <div class="card-header">
+      <div class="card-header-title">
+        <span>📡</span> 数据爬取
+      </div>
+    </div>
+    <div class="card-body" style="flex:1;overflow-y:auto;">
+      <!-- Tabs -->
+      <div class="tabs" style="margin-bottom:16px;">
+        <button class="tab-btn active" onclick="switchCrawlTab('nmpa')">国家药监局</button>
+        <button class="tab-btn" onclick="switchCrawlTab('provincial')">省挂网平台</button>
+      </div>
+
+      <!-- NMPA Tab -->
+      <div id="tab-nmpa">
+        <div class="form-group">
+          <label class="form-label">日期范围</label>
+          <input type="date" class="form-input" id="nmpa-start" value="2026-06-01">
+          <span style="margin:0 4px;font-size:12px;color:var(--text-secondary);">至</span>
+          <input type="date" class="form-input" id="nmpa-end" value="2026-07-05" style="margin-top:6px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">产品类别</label>
+          <select class="form-select" id="nmpa-category">
+            <option value="">全部类别</option>
+            <option>三类医疗器械</option>
+            <option>二类医疗器械</option>
+            <option>体外诊断试剂</option>
+            <option>有源医疗器械</option>
+            <option>无源医疗器械</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">关键词（可选）</label>
+          <input type="text" class="form-input" placeholder="输入产品名称/企业名称关键词" id="nmpa-keyword">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="startCrawl('nmpa')" id="btn-nmpa">
+          开始爬取 NMPA 数据
+        </button>
+      </div>
+
+      <!-- Provincial Tab -->
+      <div id="tab-provincial" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">省份选择</label>
+          <select class="form-select" id="province-select">
+            <option value="">请选择省份</option>
+            <option>广东省</option>
+            <option>浙江省</option>
+            <option>江苏省</option>
+            <option>山东省</option>
+            <option>四川省</option>
+            <option>湖北省</option>
+            <option>河南省</option>
+            <option>福建省</option>
+            <option>北京市</option>
+            <option>上海市</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">挂网日期</label>
+          <input type="date" class="form-input" id="prov-start" value="2026-06-01">
+          <span style="margin:0 4px;font-size:12px;color:var(--text-secondary);">至</span>
+          <input type="date" class="form-input" id="prov-end" value="2026-07-05" style="margin-top:6px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">产品类型</label>
+          <select class="form-select" id="prov-category">
+            <option value="">全部类型</option>
+            <option>药品</option>
+            <option>医用耗材</option>
+            <option>体外诊断试剂</option>
+            <option>医疗设备</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="startCrawl('provincial')" id="btn-provincial">
+          开始爬取挂网数据
+        </button>
+      </div>
+
+      <!-- Log -->
+      <div style="margin-top:16px;">
+        <label class="form-label">运行日志</label>
+        <div class="log-area" id="log-area">
+          <div class="log-line info">系统初始化完成，等待指令...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center Panel: Data Table -->
+  <div class="card" style="display:flex;flex-direction:column;">
+    <div class="card-header">
+      <div class="card-header-title">
+        <span>📋</span> 产品列表
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="badge badge-new" id="badge-total">共 0 条</span>
+        <button class="btn btn-outline btn-sm" onclick="selectAllRows()">全选</button>
+        <button class="btn btn-primary btn-sm" onclick="runAIResearch()" id="btn-research" disabled>
+          🤖 AI 调研选中产品
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="padding:12px 20px;">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">爬取产品总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-new">0</div>
+          <div class="stat-label">新增注册证</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-researched">0</div>
+          <div class="stat-label">已调研数量</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card-body-no-pad" style="flex:1;overflow:hidden;">
+      <div class="table-wrap" style="max-height:480px;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px;"><input type="checkbox" id="select-all" onchange="toggleAll(this)"></th>
+              <th>产品名称</th>
+              <th>注册证号</th>
+              <th>生产企业</th>
+              <th>类别</th>
+              <th>批准日期</th>
+              <th>数据来源</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody id="product-table-body">
+            <tr>
+              <td colspan="8">
+                <div class="empty-state">
+                  <div class="empty-icon">📭</div>
+                  <p>暂无数据，请先执行数据爬取</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: AI Research -->
+  <div class="card" style="display:flex;flex-direction:column;">
+    <div class="card-header">
+      <div class="card-header-title">
+        <span>🤖</span> AI 产品调研
+      </div>
+    </div>
+    <div class="card-body" style="flex:1;overflow-y:auto;">
+      <div class="form-group">
+        <label class="form-label">调研维度</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+            <input type="checkbox" checked> 市场规模
+          </label>
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+            <input type="checkbox" checked> 竞争格局
+          </label>
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+            <input type="checkbox" checked> 技术路线
+          </label>
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+            <input type="checkbox"> 临床证据
+          </label>
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+            <input type="checkbox"> 定价策略
+          </label>
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;">
+            <input type="checkbox"> 医保覆盖
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">额外调研要求（可选）</label>
+        <textarea class="form-textarea" id="research-extra" placeholder="补充其他调研要求..."></textarea>
+      </div>
+
+      <!-- Progress -->
+      <div id="research-progress" style="display:none;">
+        <div style="font-size:13px;font-weight:500;margin-bottom:4px;">调研进行中...</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%;"></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;" id="progress-text">0%</div>
+      </div>
+
+      <div style="margin-top:12px;" id="research-results">
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p>选中产品后点击「AI调研」开始</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ==================== State ====================
+let products = [];
+let researchResults = [];
+let currentTab = 'nmpa';
+let crawlBusy = false;
+let researchBusy = false;
+
+// ==================== Mock Data ====================
+const mockNMPAData = [
+  { name: '一次性使用无菌注射器 带针', cert: '国械注准20263140888', company: '山东威高集团医用高分子制品股份有限公司', category: '三类医疗器械', date: '2026-06-28', source: 'NMPA' },
+  { name: '全自动化学发光免疫分析仪', cert: '国械注准20263220901', company: '深圳迈瑞生物医疗电子股份有限公司', category: '二类医疗器械', date: '2026-06-25', source: 'NMPA' },
+  { name: '新型冠状病毒(2019-nCoV)抗原检测试剂盒(胶体金法)', cert: '国械注准20263401012', company: '广州万孚生物技术股份有限公司', category: '体外诊断试剂', date: '2026-06-22', source: 'NMPA' },
+  { name: '超声软组织切割止血手术设备', cert: '国械注准20263011566', company: '上海逸思医疗科技股份有限公司', category: '有源医疗器械', date: '2026-06-20', source: 'NMPA' },
+  { name: '可吸收硬脑膜封合医用胶', cert: '国械注准20263130789', company: '北京华熙生物科技股份有限公司', category: '无源医疗器械', date: '2026-06-18', source: 'NMPA' },
+  { name: '数字X射线摄影系统(DR)', cert: '国械注准20263061823', company: '联影医疗科技股份有限公司', category: '有源医疗器械', date: '2026-06-15', source: 'NMPA' },
+  { name: '一次性使用微创筋膜闭合器', cert: '国械注准20263141234', company: '常州健瑞宝医疗器械有限公司', category: '三类医疗器械', date: '2026-06-12', source: 'NMPA' },
+  { name: '全自动生化分析仪', cert: '国械注准20263221890', company: '迪瑞医疗科技股份有限公司', category: '二类医疗器械', date: '2026-06-10', source: 'NMPA' },
+];
+
+const mockProvincialData = {
+  '广东省': [
+    { name: '盐酸氨溴索注射液', cert: '国药准字H20263001', company: '广州白云山医药集团股份有限公司', category: '药品', date: '2026-07-01', source: '广东省挂网' },
+    { name: '一次性使用精密过滤输液器', cert: '粤械注准20262140001', company: '广东百合医疗科技股份有限公司', category: '医用耗材', date: '2026-06-28', source: '广东省挂网' },
+    { name: '全自动血液细胞分析仪', cert: '粤械注准20262220002', company: '深圳市帝迈生物技术有限公司', category: '医疗设备', date: '2026-06-20', source: '广东省挂网' },
+  ],
+  '浙江省': [
+    { name: '注射用奥美拉唑钠', cert: '国药准字H20263002', company: '浙江海正药业股份有限公司', category: '药品', date: '2026-07-02', source: '浙江省挂网' },
+    { name: '可吸收外科缝线', cert: '国械注准20263140890', company: '浙江微度医疗器械有限公司', category: '医用耗材', date: '2026-06-25', source: '浙江省挂网' },
+  ],
+  '江苏省': [
+    { name: '注射用头孢曲松钠', cert: '国药准字H20263003', company: '江苏恒瑞医药股份有限公司', category: '药品', date: '2026-07-03', source: '江苏省挂网' },
+    { name: '一次性使用腹腔镜穿刺器', cert: '苏械注准20262130003', company: '苏州天臣国际医疗科技有限公司', category: '医用耗材', date: '2026-06-30', source: '江苏省挂网' },
+  ],
+};
+
+const mockResearchTemplates = [
+  {
+    title: '市场规模分析',
+    summary: '该品类国内市场2025年规模约XX亿元，CAGR约X%，预计2030年将达到XX亿元。主要驱动因素包括：人口老龄化加速、慢性病患病率上升、分级诊疗政策推进。',
+  },
+  {
+    title: '竞争格局',
+    summary: '国内市场集中度中等，CR5约X%。进口品牌仍占据高端市场主要份额，但国产品牌在性价比和渠道下沉方面优势明显。近年来国产替代趋势加速。',
+  },
+  {
+    title: '技术路线对比',
+    summary: '主流技术路线分为三类：A技术路线（成熟稳定，成本低）、B技术路线（性能优，技术门槛高）、C技术路线（新兴方向，潜力大）。当前行业技术迭代周期约2-3年。',
+  },
+];
+
+// ==================== UI Functions ====================
+function switchCrawlTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-nmpa').style.display = tab === 'nmpa' ? 'block' : 'none';
+  document.getElementById('tab-provincial').style.display = tab === 'provincial' ? 'block' : 'none';
+}
+
+function addLog(msg, type = 'info') {
+  const logArea = document.getElementById('log-area');
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  const now = new Date().toLocaleTimeString();
+  line.textContent = `[${now}] ${msg}`;
+  logArea.appendChild(line);
+  logArea.scrollTop = logArea.scrollHeight;
+}
+
+function showToast(msg, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity .3s'; }, 2500);
+  setTimeout(() => toast.remove(), 2800);
+}
+
+function toggleAll(el) {
+  document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = el.checked; });
+  updateResearchBtn();
+}
+
+function updateResearchBtn() {
+  const checked = document.querySelectorAll('.row-checkbox:checked').length;
+  const btn = document.getElementById('btn-research');
+  btn.disabled = checked === 0;
+  btn.textContent = `🤖 AI 调研选中产品${checked > 0 ? ' ('+checked+')' : ''}`;
+}
+
+function selectAllRows() {
+  const allCb = document.getElementById('select-all');
+  allCb.checked = true;
+  document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = true; });
+  updateResearchBtn();
+}
+
+// ==================== Render ====================
+function renderTable() {
+  const tbody = document.getElementById('product-table-body');
+  if (products.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📭</div><p>暂无数据，请先执行数据爬取</p></div></td></tr>`;
+    document.getElementById('badge-total').textContent = '共 0 条';
+    document.getElementById('stat-total').textContent = '0';
+    document.getElementById('stat-new').textContent = '0';
+    document.getElementById('stat-researched').textContent = '0';
+    document.getElementById('select-all').checked = false;
+    updateResearchBtn();
+    return;
+  }
+
+  tbody.innerHTML = products.map((p, i) => `
+    <tr>
+      <td><input type="checkbox" class="row-checkbox" onchange="updateResearchBtn()" data-index="${i}"></td>
+      <td><strong>${p.name}</strong></td>
+      <td style="font-family:monospace;font-size:12px;">${p.cert}</td>
+      <td>${p.company}</td>
+      <td><span class="badge badge-new">${p.category}</span></td>
+      <td>${p.date}</td>
+      <td><span class="badge ${p.source === 'NMPA' ? 'badge-new' : 'badge-pending'}">${p.source}</span></td>
+      <td>${p.researched ? '<span class="badge badge-done">已调研</span>' : '<span class="badge badge-pending">待调研</span>'}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('badge-total').textContent = `共 ${products.length} 条`;
+  document.getElementById('stat-total').textContent = products.length;
+  document.getElementById('stat-new').textContent = products.filter(p => !p.researched).length;
+  document.getElementById('stat-researched').textContent = products.filter(p => p.researched).length;
+  document.getElementById('select-all').checked = false;
+  updateResearchBtn();
+}
+
+function renderResearchResults() {
+  const container = document.getElementById('research-results');
+  if (researchResults.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>选中产品后点击「AI调研」开始</p></div>`;
+    return;
+  }
+  container.innerHTML = researchResults.map(r => `
+    <div class="research-item">
+      <div class="research-title">${r.productName}</div>
+      <div class="research-meta">注册证号：${r.cert} | 调研时间：${r.time}</div>
+      <div class="research-tags">
+        ${r.dimensions.map(d => `<span class="tag">${d}</span>`).join('')}
+      </div>
+      <div class="research-summary">${r.summary}</div>
+    </div>
+  `).join('');
+}
+
+// ==================== Crawl ====================
+async function startCrawl(source) {
+  if (crawlBusy) return;
+  crawlBusy = true;
+
+  const btnId = source === 'nmpa' ? 'btn-nmpa' : 'btn-provincial';
+  const btn = document.getElementById(btnId);
+  const origText = btn.textContent;
+  btn.innerHTML = '<span class="spinner"></span> 爬取中...';
+  btn.disabled = true;
+
+  addLog(`开始爬取 ${source === 'nmpa' ? '国家药监局' : '省挂网平台'} 数据...`, 'info');
+
+  // Simulate crawl delay
+  await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
+
+  let newProducts = [];
+
+  if (source === 'nmpa') {
+    const keyword = document.getElementById('nmpa-keyword').value.trim();
+    let data = [...mockNMPAData];
+    if (keyword) {
+      data = data.filter(d => d.name.includes(keyword) || d.company.includes(keyword));
+    }
+    newProducts = data.map(d => ({ ...d, researched: false }));
+    addLog(`NMPA 爬取完成，获取 ${newProducts.length} 条新注册证产品。`, 'success');
+  } else {
+    const province = document.getElementById('province-select').value;
+    if (!province) {
+      addLog('请先选择省份！', 'warn');
+      showToast('请先选择省份', 'error');
+      crawlBusy = false;
+      btn.textContent = origText;
+      btn.disabled = false;
+      return;
+    }
+    const data = mockProvincialData[province] || [];
+    newProducts = data.map(d => ({ ...d, researched: false }));
+    addLog(`${province}挂网平台爬取完成，获取 ${newProducts.length} 条新挂网产品。`, 'success');
+  }
+
+  // Merge dedup
+  const existingCerts = new Set(products.map(p => p.cert));
+  let added = 0;
+  newProducts.forEach(p => {
+    if (!existingCerts.has(p.cert)) {
+      products.push(p);
+      existingCerts.add(p.cert);
+      added++;
+    }
+  });
+
+  addLog(`去重后新增 ${added} 条产品记录。`, added > 0 ? 'success' : 'warn');
+  if (added > 0) showToast(`成功爬取 ${added} 条新数据`);
+  else showToast('未发现新数据，已去重', 'error');
+
+  renderTable();
+  btn.textContent = origText;
+  btn.disabled = false;
+  crawlBusy = false;
+}
+
+// ==================== AI Research ====================
+async function runAIResearch() {
+  if (researchBusy) return;
+  researchBusy = true;
+
+  const checked = document.querySelectorAll('.row-checkbox:checked');
+  if (checked.length === 0) return;
+
+  const indices = Array.from(checked).map(cb => parseInt(cb.dataset.index));
+  const selectedProducts = indices.map(i => products[i]);
+
+  const dimensions = [];
+  document.querySelectorAll('#research-results').closest('.card-body').querySelectorAll('input[type=checkbox]:checked').forEach(cb => {
+    dimensions.push(cb.parentElement.textContent.trim());
+  });
+
+  const btn = document.getElementById('btn-research');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 调研中...';
+
+  const progressDiv = document.getElementById('research-progress');
+  const progressFill = document.getElementById('progress-fill');
+  const progressText = document.getElementById('progress-text');
+  progressDiv.style.display = 'block';
+
+  researchResults = [];
+  addLog(`开始 AI 调研 ${selectedProducts.length} 款产品，维度：${dimensions.join('、')}`, 'info');
+
+  for (let i = 0; i < selectedProducts.length; i++) {
+    const p = selectedProducts[i];
+    addLog(`正在调研：${p.name}...`, 'info');
+
+    // Simulate research
+    await new Promise(r => setTimeout(r, 1200 + Math.random() * 1500));
+
+    const analysisParts = [
+      `**市场规模**：该品类2025年国内市场规模约${(15 + Math.random() * 80).toFixed(0)}亿元，近三年CAGR约${(5 + Math.random() * 15).toFixed(1)}%，受人口老龄化和医疗新基建推动，预计2030年规模将达${(50 + Math.random() * 150).toFixed(0)}亿元。`,
+      `**竞争格局**：国内市场参与者约${(8 + Math.random() * 30).toFixed(0)}家，CR5约${(30 + Math.random() * 40).toFixed(0)}%。${p.company}在该细分领域具备一定先发优势，$(['进口品牌仍占据高端市场主要份额', '国产替代趋势明显', '市场集中度有望进一步提升'][Math.floor(Math.random()*3)])。`,
+      `**技术路线**：当前主流技术路径为${['化学发光法', '胶体金法', '荧光PCR法', '酶联免疫法', '微流控技术'][Math.floor(Math.random()*5)]}，技术壁垒中等。产品在${['灵敏度', '特异性', '检测速度', '自动化程度'][Math.floor(Math.random()*4)]}方面具有差异化优势。`,
+      `**市场前景**：综合来看，该产品具备较好的市场前景。建议重点关注${['集采政策影响', '医保准入进度', '渠道拓展策略', '竞品上市节奏'][Math.floor(Math.random()*4)]}。`,
+    ];
+
+    researchResults.push({
+      productName: p.name,
+      cert: p.cert,
+      time: new Date().toLocaleString(),
+      dimensions: dimensions,
+      summary: analysisParts.join('\n\n'),
+    });
+
+    // Update progress
+    const pct = Math.round(((i + 1) / selectedProducts.length) * 100);
+    progressFill.style.width = pct + '%';
+    progressText.textContent = pct + '%';
+
+    // Mark as researched
+    p.researched = true;
+  }
+
+  addLog(`AI 调研完成，共输出 ${researchResults.length} 份调研报告。`, 'success');
+  showToast(`已完成 ${researchResults.length} 款产品调研`);
+
+  progressDiv.style.display = 'none';
+  renderTable();
+  renderResearchResults();
+
+  btn.textContent = '🤖 AI 调研选中产品';
+  btn.disabled = true;
+  researchBusy = false;
+}
+
+// ==================== Init ====================
+renderTable();
+</script>
+
+</body>
+</html>
