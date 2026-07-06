@@ -531,6 +531,33 @@
       </div>
     </div>
     <div class="card-body" style="flex:1;overflow-y:auto;">
+      <!-- API 配置（可折叠） -->
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleApiConfig()">
+          <label class="form-label" style="cursor:pointer;margin:0;">⚙️ API 设置</label>
+          <span style="font-size:12px;color:var(--text-secondary);" id="api-toggle-icon">▼</span>
+        </div>
+        <div id="api-config-body" style="display:none;margin-top:8px;">
+          <div class="form-group">
+            <label class="form-label">Base URL</label>
+            <input type="text" class="form-input" id="api-base-url" placeholder="https://api.deepseek.com" value="">
+          </div>
+          <div class="form-group">
+            <label class="form-label">API Key</label>
+            <input type="password" class="form-input" id="api-key" placeholder="sk-xxxxxxxxxxxxxxxx" value="">
+          </div>
+          <div class="form-group">
+            <label class="form-label">模型名称</label>
+            <input type="text" class="form-input" id="api-model" placeholder="deepseek-chat" value="">
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="saveApiConfig()">保存配置</button>
+            <button class="btn btn-outline btn-sm" onclick="testApiConnection()">测试连接</button>
+          </div>
+          <div id="api-test-result" style="font-size:12px;margin-top:6px;"></div>
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="form-label">调研维度</label>
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -821,26 +848,80 @@ async function runAIResearch() {
   researchResults = [];
   addLog(`开始 AI 调研 ${selectedProducts.length} 款产品，维度：${dimensions.join('、')}`, 'info');
 
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    addLog('请先在右侧面板配置 API Key！', 'warn');
+    showToast('请先配置 API Key', 'error');
+    researchBusy = false;
+    btn.textContent = '🤖 AI 调研选中产品';
+    btn.disabled = false;
+    progressDiv.style.display = 'none';
+    return;
+  }
+
+  const baseUrl = getApiBaseUrl();
+  const model = getApiModel();
+
   for (let i = 0; i < selectedProducts.length; i++) {
     const p = selectedProducts[i];
-    addLog(`正在调研：${p.name}...`, 'info');
+    addLog(`正在AI调研：${p.name}...`, 'info');
 
-    // Simulate research
-    await new Promise(r => setTimeout(r, 1200 + Math.random() * 1500));
+    const prompt = `请对以下医药产品进行专业调研分析：
 
-    const analysisParts = [
-      `**市场规模**：该品类2025年国内市场规模约${(15 + Math.random() * 80).toFixed(0)}亿元，近三年CAGR约${(5 + Math.random() * 15).toFixed(1)}%，受人口老龄化和医疗新基建推动，预计2030年规模将达${(50 + Math.random() * 150).toFixed(0)}亿元。`,
-      `**竞争格局**：国内市场参与者约${(8 + Math.random() * 30).toFixed(0)}家，CR5约${(30 + Math.random() * 40).toFixed(0)}%。${p.company}在该细分领域具备一定先发优势，$(['进口品牌仍占据高端市场主要份额', '国产替代趋势明显', '市场集中度有望进一步提升'][Math.floor(Math.random()*3)])。`,
-      `**技术路线**：当前主流技术路径为${['化学发光法', '胶体金法', '荧光PCR法', '酶联免疫法', '微流控技术'][Math.floor(Math.random()*5)]}，技术壁垒中等。产品在${['灵敏度', '特异性', '检测速度', '自动化程度'][Math.floor(Math.random()*4)]}方面具有差异化优势。`,
-      `**市场前景**：综合来看，该产品具备较好的市场前景。建议重点关注${['集采政策影响', '医保准入进度', '渠道拓展策略', '竞品上市节奏'][Math.floor(Math.random()*4)]}。`,
-    ];
+产品名称：${p.name}
+注册证号：${p.cert}
+生产企业：${p.company}
+产品类别：${p.category}
+批准日期：${p.date}
+数据来源：${p.source}
+
+请从以下维度进行分析（以markdown格式输出）：
+${dimensions.map(d => `- ${d}`).join('\n')}
+
+要求：
+1. 每个维度用**加粗标题**，下面展开具体分析
+2. 基于公开可查的行业数据和信息
+3. 如果某些信息无法确认，请注明"暂无公开数据"
+4. 最后给出综合评估与建议`;
+
+    let summary = '';
+    try {
+      const response = await fetch(`${baseUrl}/v1/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            { role: 'system', content: '你是一位资深医药行业分析师，擅长医疗器械和药品的市场调研。请用专业、客观的语言进行分析，使用Markdown格式输出。' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7,
+          max_tokens: 2048
+        })
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`API 请求失败 (${response.status}): ${errText.slice(0, 200)}`);
+      }
+
+      const data = await response.json();
+      summary = data.choices[0].message.content;
+      addLog(`${p.name} AI调研完成`, 'success');
+    } catch (err) {
+      addLog(`${p.name} 调研失败: ${err.message}`, 'error');
+      summary = `**调研失败**：${err.message}`;
+    }
 
     researchResults.push({
       productName: p.name,
       cert: p.cert,
       time: new Date().toLocaleString(),
       dimensions: dimensions,
-      summary: analysisParts.join('\n\n'),
+      summary: summary,
     });
 
     // Update progress
@@ -863,6 +944,92 @@ async function runAIResearch() {
   btn.disabled = true;
   researchBusy = false;
 }
+
+// ==================== API Config ====================
+function getApiKey() {
+  return localStorage.getItem('med_api_key') || document.getElementById('api-key').value || '';
+}
+
+function getApiBaseUrl() {
+  return localStorage.getItem('med_api_base_url') || document.getElementById('api-base-url').value || 'https://api.deepseek.com';
+}
+
+function getApiModel() {
+  return localStorage.getItem('med_api_model') || document.getElementById('api-model').value || 'deepseek-chat';
+}
+
+function saveApiConfig() {
+  const key = document.getElementById('api-key').value.trim();
+  const url = document.getElementById('api-base-url').value.trim();
+  const model = document.getElementById('api-model').value.trim();
+  if (key) localStorage.setItem('med_api_key', key);
+  if (url) localStorage.setItem('med_api_base_url', url);
+  if (model) localStorage.setItem('med_api_model', model);
+  showToast('API 配置已保存');
+}
+
+function toggleApiConfig() {
+  const body = document.getElementById('api-config-body');
+  const icon = document.getElementById('api-toggle-icon');
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    icon.textContent = '▲';
+  } else {
+    body.style.display = 'none';
+    icon.textContent = '▼';
+  }
+}
+
+async function testApiConnection() {
+  const key = document.getElementById('api-key').value.trim();
+  const url = document.getElementById('api-base-url').value.trim() || 'https://api.deepseek.com';
+  const model = document.getElementById('api-model').value.trim() || 'deepseek-chat';
+  const resultEl = document.getElementById('api-test-result');
+
+  if (!key) {
+    resultEl.innerHTML = '<span style="color:#dc2626;">请先填写 API Key</span>';
+    return;
+  }
+  resultEl.innerHTML = '<span style="color:#d97706;">测试中...</span>';
+
+  try {
+    const resp = await fetch(`${url}/v1/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${key}`
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [{ role: 'user', content: '回复"OK"' }],
+        max_tokens: 10
+      })
+    });
+    if (resp.ok) {
+      resultEl.innerHTML = '<span style="color:#059669;">✓ 连接成功</span>';
+      saveApiConfig();
+    } else {
+      const err = await resp.text();
+      resultEl.innerHTML = `<span style="color:#dc2626;">✗ 连接失败 (${resp.status}): ${err.slice(0, 100)}</span>`;
+    }
+  } catch (e) {
+    resultEl.innerHTML = `<span style="color:#dc2626;">✗ 网络错误: ${e.message}</span>`;
+  }
+}
+
+// 页面加载时恢复已保存的配置
+(function loadApiConfig() {
+  const key = localStorage.getItem('med_api_key');
+  const url = localStorage.getItem('med_api_base_url');
+  const model = localStorage.getItem('med_api_model');
+  if (key) document.getElementById('api-key').value = key;
+  if (url) document.getElementById('api-base-url').value = url;
+  if (model) document.getElementById('api-model').value = model;
+  if (key || url || model) {
+    document.getElementById('api-config-body').style.display = 'block';
+    document.getElementById('api-toggle-icon').textContent = '▲';
+  }
+})();
 
 // ==================== Init ====================
 renderTable();
