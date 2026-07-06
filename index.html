@@ -940,7 +940,7 @@ async function runAIResearch() {
   const selectedProducts = indices.map(i => products[i]);
 
   const dimensions = [];
-  document.querySelectorAll('#research-results').closest('.card-body').querySelectorAll('input[type=checkbox]:checked').forEach(cb => {
+  document.querySelector('#research-results').closest('.card-body').querySelectorAll('input[type=checkbox]:checked').forEach(cb => {
     dimensions.push(cb.parentElement.textContent.trim());
   });
 
