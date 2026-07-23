@@ -494,7 +494,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">日期范围</label>
-          <input type="date" class="form-input" id="hospital-start" value="2026-06-01">
+          <input type="date" class="form-input" id="hospital-start" value="2026-01-01">
           <span style="margin:0 4px;font-size:12px;color:var(--text-secondary);">至</span>
           <input type="date" class="form-input" id="hospital-end" value="2026-07-23" style="margin-top:6px;">
         </div>
@@ -1042,7 +1042,9 @@ const mockResearchTemplates = [];
 function switchCrawlTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabMap = { nmpa: 0, provincial: 1, hospital: 2 };
+  if (tabBtns[tabMap[tab]]) tabBtns[tabMap[tab]].classList.add('active');
   document.getElementById('tab-nmpa').style.display = tab === 'nmpa' ? '' : 'none';
   document.getElementById('tab-provincial').style.display = tab === 'provincial' ? '' : 'none';
   document.getElementById('tab-hospital').style.display = tab === 'hospital' ? '' : 'none';
@@ -1203,8 +1205,8 @@ async function startCrawl(source) {
     newProducts = data;
     addLog(`NMPA 爬取完成，获取 ${newProducts.length} 条新注册证产品。`, 'success');
   } else if (source === 'provincial') {
-    const province = document.getElementById('province-select').value;
-    if (!province) {
+    const province = document.getElementById('province-select').value.replace(/[省市]$/, '');
+    if (!document.getElementById('province-select').value) {
       addLog('请先选择省份！', 'warn');
       showToast('请先选择省份', 'error');
       crawlBusy = false;
