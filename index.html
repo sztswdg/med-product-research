@@ -807,386 +807,236 @@ let researchBusy = false;
 
 // ==================== Mock Data ====================
 const mockNMPAData = [
-  { name: '一次性使用无菌注射器 带针', cert: '国械注准20263140888', company: '山东威高集团医用高分子制品股份有限公司', category: '三类医疗器械', date: '2026-07-06', province: '', source: 'NMPA' },
-  { name: '全自动化学发光免疫分析仪', cert: '国械注准20263220901', company: '深圳迈瑞生物医疗电子股份有限公司', category: '二类医疗器械', date: '2026-07-05', province: '', source: 'NMPA' },
-  { name: '新型冠状病毒抗原检测试剂盒(胶体金法)', cert: '国械注准20263401012', company: '广州万孚生物技术股份有限公司', category: '体外诊断试剂', date: '2026-07-04', province: '', source: 'NMPA' },
-  { name: '超声软组织切割止血手术设备', cert: '国械注准20263011566', company: '上海逸思医疗科技股份有限公司', category: '有源医疗器械', date: '2026-07-03', province: '', source: 'NMPA' },
-  { name: '可吸收硬脑膜封合医用胶', cert: '国械注准20263130789', company: '北京华熙生物科技股份有限公司', category: '无源医疗器械', date: '2026-07-02', province: '', source: 'NMPA' },
-  { name: '数字X射线摄影系统(DR)', cert: '国械注准20263061823', company: '联影医疗科技股份有限公司', category: '有源医疗器械', date: '2026-07-01', province: '', source: 'NMPA' },
-  { name: '一次性使用微创筋膜闭合器', cert: '国械注准20263141234', company: '常州健瑞宝医疗器械有限公司', category: '三类医疗器械', date: '2026-06-30', province: '', source: 'NMPA' },
-  { name: '全自动生化分析仪', cert: '国械注准20263221890', company: '迪瑞医疗科技股份有限公司', category: '二类医疗器械', date: '2026-06-29', province: '', source: 'NMPA' },
-  { name: '便携式彩色多普勒超声诊断仪', cert: '国械注准20263061890', company: '深圳开立生物医疗科技股份有限公司', category: '有源医疗器械', date: '2026-06-28', province: '', source: 'NMPA' },
-  { name: '椎体成形术用骨水泥', cert: '国械注准20263130901', company: '上海凯利泰医疗科技股份有限公司', category: '无源医疗器械', date: '2026-06-27', province: '', source: 'NMPA' },
-  { name: '乙型肝炎病毒表面抗原检测试剂盒(化学发光法)', cert: '国械注准20263401234', company: '厦门万泰凯瑞生物技术有限公司', category: '体外诊断试剂', date: '2026-06-26', province: '', source: 'NMPA' },
-  { name: '血液透析浓缩物', cert: '国械注准20263451345', company: '威高血液净化制品(上海)有限公司', category: '三类医疗器械', date: '2026-06-25', province: '', source: 'NMPA' },
-  { name: '微波消融治疗仪', cert: '国械注准20263091456', company: '南京康友医疗科技有限公司', category: '有源医疗器械', date: '2026-06-24', province: '', source: 'NMPA' },
-  { name: '可吸收性外科缝线', cert: '国械注准20263131567', company: '杭州华威医疗用品有限公司', category: '无源医疗器械', date: '2026-06-23', province: '', source: 'NMPA' },
-  { name: '全自动血细胞分析仪', cert: '国械注准20263221678', company: '深圳帝迈生物技术有限公司', category: '二类医疗器械', date: '2026-06-22', province: '', source: 'NMPA' },
-  { name: '甲型流感病毒抗原检测试剂盒(免疫层析法)', cert: '国械注准20263401789', company: '杭州博拓生物科技股份有限公司', category: '体外诊断试剂', date: '2026-06-21', province: '', source: 'NMPA' },
-  { name: '颅内取栓支架', cert: '国械注准20263131890', company: '上海微创心脉医疗科技股份有限公司', category: '三类医疗器械', date: '2026-06-20', province: '', source: 'NMPA' },
-  { name: '磁共振成像系统', cert: '国械注准20263061901', company: '东软医疗系统股份有限公司', category: '有源医疗器械', date: '2026-06-19', province: '', source: 'NMPA' },
-  { name: '胶原蛋白植入剂', cert: '国械注准20263131912', company: '长春博泰医药生物技术有限责任公司', category: '无源医疗器械', date: '2026-06-18', province: '', source: 'NMPA' },
-  { name: '全自动凝血分析仪', cert: '国械注准20263231923', company: '北京赛科希德科技股份有限公司', category: '二类医疗器械', date: '2026-06-17', province: '', source: 'NMPA' },
-  { name: '丙型肝炎病毒抗体检测试剂盒(胶体金法)', cert: '国械注准20263402034', company: '北京万泰生物药业股份有限公司', category: '体外诊断试剂', date: '2026-06-16', province: '', source: 'NMPA' },
-  { name: '药物涂层冠状动脉支架系统', cert: '国械注准20263132045', company: '乐普(北京)医疗器械股份有限公司', category: '三类医疗器械', date: '2026-06-15', province: '', source: 'NMPA' },
-  { name: '眼科手术用重水', cert: '国械注准20263132156', company: '苏州六六视觉科技股份有限公司', category: '无源医疗器械', date: '2026-06-14', province: '', source: 'NMPA' },
-  { name: '麻醉深度监测仪', cert: '国械注准20263232167', company: '深圳华声医疗技术股份有限公司', category: '二类医疗器械', date: '2026-06-13', province: '', source: 'NMPA' },
-  { name: '一次性使用输液器 带针', cert: '国械注准20263142278', company: '江西洪达医疗器械集团有限公司', category: '三类医疗器械', date: '2026-06-12', province: '', source: 'NMPA' },
-  { name: '高频电刀', cert: '国械注准20263092289', company: '北京英杰华科技有限公司', category: '有源医疗器械', date: '2026-06-11', province: '', source: 'NMPA' },
-  { name: '人乳头瘤病毒(HPV)核酸检测试剂盒(PCR法)', cert: '国械注准20263402390', company: '潮州凯普生物化学有限公司', category: '体外诊断试剂', date: '2026-06-10', province: '', source: 'NMPA' },
-  { name: '人工髋关节假体', cert: '国械注准20263132401', company: '北京春立正达医疗器械股份有限公司', category: '三类医疗器械', date: '2026-06-09', province: '', source: 'NMPA' },
-  { name: '超声骨刀', cert: '国械注准20263092512', company: '桂林市啄木鸟医疗器械有限公司', category: '有源医疗器械', date: '2026-06-08', province: '', source: 'NMPA' },
-  { name: '医用透明质酸钠凝胶', cert: '国械注准20263132623', company: '华熙生物科技股份有限公司', category: '无源医疗器械', date: '2026-06-07', province: '', source: 'NMPA' },
-  { name: '结核分枝杆菌特异性细胞免疫反应检测试剂盒', cert: '国械注准20263402401', company: '安徽智飞龙科马生物制药有限公司', category: '体外诊断试剂', date: '2026-06-06', province: '', source: 'NMPA' },
-  { name: '带线锚钉', cert: '国械注准20263132734', company: '北京德益达美医疗科技有限公司', category: '三类医疗器械', date: '2026-06-05', province: '', source: 'NMPA' },
-  { name: '激光治疗仪', cert: '国械注准20263092845', company: '武汉奇致激光技术股份有限公司', category: '有源医疗器械', date: '2026-06-04', province: '', source: 'NMPA' },
-  { name: '血糖试纸(葡萄糖氧化酶法)', cert: '国械注准20263402556', company: '三诺生物传感股份有限公司', category: '体外诊断试剂', date: '2026-06-03', province: '', source: 'NMPA' },
-  { name: '脊柱后路内固定系统', cert: '国械注准20263132867', company: '山东威高骨科材料股份有限公司', category: '三类医疗器械', date: '2026-06-02', province: '', source: 'NMPA' },
-  { name: '病人监护仪', cert: '国械注准20263232978', company: '广东宝莱特医用科技股份有限公司', category: '二类医疗器械', date: '2026-06-01', province: '', source: 'NMPA' },
-  { name: '幽门螺杆菌抗体检测试剂盒(胶体金法)', cert: '国械注准20263402689', company: '北京华大吉比爱生物技术有限公司', category: '体外诊断试剂', date: '2026-05-31', province: '', source: 'NMPA' },
-  { name: '一次性使用血管内导管', cert: '国械注准20263143090', company: '广东百合医疗科技股份有限公司', category: '三类医疗器械', date: '2026-05-30', province: '', source: 'NMPA' },
-  { name: '红外热像仪', cert: '国械注准20263093201', company: '重庆伟联科技有限公司', category: '有源医疗器械', date: '2026-05-29', province: '', source: 'NMPA' },
-  { name: '输液泵', cert: '国械注准20263233312', company: '北京科力建元医疗科技有限公司', category: '二类医疗器械', date: '2026-05-28', province: '', source: 'NMPA' },
-  { name: '梅毒螺旋体抗体检测试剂盒(化学发光法)', cert: '国械注准20263403423', company: '深圳迈瑞生物医疗电子股份有限公司', category: '体外诊断试剂', date: '2026-05-27', province: '', source: 'NMPA' },
-  { name: '金属锁定接骨板系统', cert: '国械注准20263133534', company: '常州华森医疗器械股份有限公司', category: '三类医疗器械', date: '2026-05-26', province: '', source: 'NMPA' },
-  { name: '麻醉机', cert: '国械注准20263233645', company: '深圳迈瑞生物医疗电子股份有限公司', category: '二类医疗器械', date: '2026-05-25', province: '', source: 'NMPA' },
-  { name: '人类免疫缺陷病毒抗体检测试剂盒(胶体金法)', cert: '国械注准20263403756', company: '广州万孚生物技术股份有限公司', category: '体外诊断试剂', date: '2026-05-24', province: '', source: 'NMPA' },
-  { name: '胸腰椎后路内固定系统', cert: '国械注准20263133867', company: '大博医疗科技股份有限公司', category: '三类医疗器械', date: '2026-05-23', province: '', source: 'NMPA' },
-  { name: '电动病床', cert: '国械注准20263233978', company: '江苏赛康医疗设备股份有限公司', category: '二类医疗器械', date: '2026-05-22', province: '', source: 'NMPA' },
-  { name: '降钙素原检测试剂盒(荧光免疫层析法)', cert: '国械注准20263404089', company: '南京诺唯赞医疗科技有限公司', category: '体外诊断试剂', date: '2026-05-21', province: '', source: 'NMPA' },
-  { name: '种植体系统', cert: '国械注准20263134190', company: '威海威高洁丽康生物材料有限公司', category: '三类医疗器械', date: '2026-05-20', province: '', source: 'NMPA' },
-  { name: '医用内窥镜冷光源', cert: '国械注准20263094301', company: '上海澳华内镜股份有限公司', category: '有源医疗器械', date: '2026-05-19', province: '', source: 'NMPA' },
-  { name: '肌钙蛋白I检测试剂盒(化学发光法)', cert: '国械注准20263404412', company: '深圳普门科技股份有限公司', category: '体外诊断试剂', date: '2026-05-18', province: '', source: 'NMPA' },
-  { name: '一次性使用内窥镜注射针', cert: '国械注准20263134523', company: '南微医学科技股份有限公司', category: '三类医疗器械', date: '2026-05-17', province: '', source: 'NMPA' },
-  { name: '无创呼吸机', cert: '国械注准20263234634', company: '北京怡和嘉业医疗科技股份有限公司', category: '二类医疗器械', date: '2026-05-16', province: '', source: 'NMPA' },
-  { name: '新型冠状病毒中和抗体检测试剂盒', cert: '国械注准20263404745', company: '北京热景生物技术股份有限公司', category: '体外诊断试剂', date: '2026-05-15', province: '', source: 'NMPA' },
-  { name: '射频消融导管', cert: '国械注准20263094856', company: '上海微创电生理医疗科技股份有限公司', category: '有源医疗器械', date: '2026-05-14', province: '', source: 'NMPA' },
-  { name: '血液灌流器', cert: '国械注准20263134967', company: '健帆生物科技集团股份有限公司', category: '三类医疗器械', date: '2026-05-13', province: '', source: 'NMPA' },
-  { name: '尿液分析仪', cert: '国械注准20263235078', company: '长春迪瑞医疗科技股份有限公司', category: '二类医疗器械', date: '2026-05-12', province: '', source: 'NMPA' },
-  { name: '抗缪勒管激素检测试剂盒(化学发光法)', cert: '国械注准20263405189', company: '郑州安图生物工程股份有限公司', category: '体外诊断试剂', date: '2026-05-11', province: '', source: 'NMPA' },
-  { name: '硬性角膜接触镜', cert: '国械注准20263135290', company: '欧普康视科技股份有限公司', category: '无源医疗器械', date: '2026-05-10', province: '', source: 'NMPA' },
-  { name: '体外除颤监护仪', cert: '国械注准20263095401', company: '深圳迈瑞生物医疗电子股份有限公司', category: '有源医疗器械', date: '2026-05-09', province: '', source: 'NMPA' },
-  { name: 'EB病毒核酸检测试剂盒(PCR-荧光探针法)', cert: '国械注准20263405512', company: '中山大学达安基因股份有限公司', category: '体外诊断试剂', date: '2026-05-08', province: '', source: 'NMPA' },
+  { name: "自膨式动脉瘤瘤内栓塞器", cert: "国械注准20263130001", company: "上海微密医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-30", province: "", source: "NMPA" },
+  { name: "经内镜肠道支架系统", cert: "国械注准20263130002", company: "常州佳森医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-29", province: "", source: "NMPA" },
+  { name: "髂动脉覆膜支架系统", cert: "国械注准20263130003", company: "先健科技(深圳)有限公司", category: "境内第三类医疗器械", date: "2026-01-28", province: "", source: "NMPA" },
+  { name: "注射用透明质酸钠溶液", cert: "国械注准20263130004", company: "杭州协合医疗用品有限公司", category: "境内第三类医疗器械", date: "2026-01-27", province: "", source: "NMPA" },
+  { name: "一次性使用无菌注射器", cert: "国械注准20263140005", company: "浙江龙德医药有限公司", category: "境内第三类医疗器械", date: "2026-01-26", province: "", source: "NMPA" },
+  { name: "传送导管", cert: "国械注准20263030006", company: "美敦力(上海)管理有限公司", category: "境内第三类医疗器械", date: "2026-01-25", province: "", source: "NMPA" },
+  { name: "尿道支架系统", cert: "国械注准20263130007", company: "杭州健嘉润宏科技有限公司", category: "境内第三类医疗器械", date: "2026-01-24", province: "", source: "NMPA" },
+  { name: "球囊封堵微导管", cert: "国械注准20263030008", company: "环心医疗科技(苏州)有限公司", category: "境内第三类医疗器械", date: "2026-01-23", province: "", source: "NMPA" },
+  { name: "柔性金属丝", cert: "国械注准20263130009", company: "厦门金鼎时代医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-22", province: "", source: "NMPA" },
+  { name: "冠脉刻痕球囊扩张导管", cert: "国械注准20263030010", company: "深圳市赛禾医疗技术有限公司", category: "境内第三类医疗器械", date: "2026-01-21", province: "", source: "NMPA" },
+  { name: "一次性使用测温型中心静脉导管及附件", cert: "国械注准20263030011", company: "佛山特种医用导管有限责任公司", category: "境内第三类医疗器械", date: "2026-01-20", province: "", source: "NMPA" },
+  { name: "磷酸钙注射型人工骨", cert: "国械注准20263130012", company: "大博医疗科技股份有限公司", category: "境内第三类医疗器械", date: "2026-01-19", province: "", source: "NMPA" },
+  { name: "冠状动脉造影导管", cert: "国械注准20263030013", company: "苏州心锐医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-18", province: "", source: "NMPA" },
+  { name: "血栓抽吸导管及附件", cert: "国械注准20263030014", company: "上海瑛泰医疗器械股份有限公司", category: "境内第三类医疗器械", date: "2026-01-17", province: "", source: "NMPA" },
+  { name: "钙硅生物陶瓷口腔骨修复材料", cert: "国械注准20263170015", company: "烟台正海生物科技股份有限公司", category: "境内第三类医疗器械", date: "2026-01-16", province: "", source: "NMPA" },
+  { name: "个性化基台及螺钉", cert: "国械注准20263170016", company: "厦门市仿真美义齿科技有限公司", category: "境内第三类医疗器械", date: "2026-01-15", province: "", source: "NMPA" },
+  { name: "单间室膝关节假体", cert: "国械注准20263130017", company: "北京爱康宜诚医疗器材有限公司", category: "境内第三类医疗器械", date: "2026-01-14", province: "", source: "NMPA" },
+  { name: "金属带锁髓内钉", cert: "国械注准20263130018", company: "江苏创悦医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-13", province: "", source: "NMPA" },
+  { name: "一次性使用精密过滤袋式输液器 带针", cert: "国械注准20263140019", company: "南阳市久康医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-12", province: "", source: "NMPA" },
+  { name: "基台及附件", cert: "国械注准20263170020", company: "渝悦新材料(重庆)有限公司", category: "境内第三类医疗器械", date: "2026-01-11", province: "", source: "NMPA" },
+  { name: "复合基台及附件", cert: "国械注准20263170021", company: "重庆西科码医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-10", province: "", source: "NMPA" },
+  { name: "腓骨髓内钉主钉", cert: "国械注准20263130022", company: "厦门中科兴医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-09", province: "", source: "NMPA" },
+  { name: "胶原蛋白植入剂", cert: "国械注准20263130023", company: "成都奇璞生物科技有限公司", category: "境内第三类医疗器械", date: "2026-01-08", province: "", source: "NMPA" },
+  { name: "外周球囊扩张导管", cert: "国械注准20263030024", company: "苏州天鸿盛捷医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-07", province: "", source: "NMPA" },
+  { name: "注射用透明质酸钠溶液", cert: "国械注准20263130025", company: "海南希睿达生物技术有限公司", category: "境内第三类医疗器械", date: "2026-01-06", province: "", source: "NMPA" },
+  { name: "一次性使用精密过滤避光输液器 带针", cert: "国械注准20263140026", company: "山东侨牌集团有限公司", category: "境内第三类医疗器械", date: "2026-01-05", province: "", source: "NMPA" },
+  { name: "一次性使用结扎夹", cert: "国械注准20263020027", company: "绍兴精微医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-04", province: "", source: "NMPA" },
+  { name: "远端保护器", cert: "国械注准20263030028", company: "苏州天鸿盛捷医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-03", province: "", source: "NMPA" },
+  { name: "血液透析浓缩液", cert: "国械注准20263100029", company: "吉林省莱沃医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-02", province: "", source: "NMPA" },
+  { name: "腔静脉滤器回收装置", cert: "国械注准20263030030", company: "北京巨源仁通医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-01", province: "", source: "NMPA" },
+  { name: "一次性使用钝末端注射针", cert: "国械注准20263140031", company: "河南博晨医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-30", province: "", source: "NMPA" },
+  { name: "胆道支架套装", cert: "国械注准20263130032", company: "术普医疗(常州)有限公司", category: "境内第三类医疗器械", date: "2026-01-29", province: "", source: "NMPA" },
+  { name: "外周血栓抽吸导管", cert: "国械注准20263030033", company: "上海珩畅医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-28", province: "", source: "NMPA" },
+  { name: "玻璃化解冻液", cert: "国械注准20263180034", company: "成都艾伟孚生物科技有限公司", category: "境内第三类医疗器械", date: "2026-01-27", province: "", source: "NMPA" },
+  { name: "高压造影注射器管路系统", cert: "国械注准20263060035", company: "东莞市一星医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-01-26", province: "", source: "NMPA" },
+  { name: "取卵液", cert: "国械注准20263180036", company: "江苏瑞辅达医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-01-25", province: "", source: "NMPA" },
+  { name: "可吸收性外科缝线", cert: "国械注准20263020252", company: "淮阴医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-02-24", province: "", source: "NMPA" },
+  { name: "一次性使用带夹连发施夹钳和结扎夹", cert: "国械注准20263020253", company: "合肥中科瑞沃医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-02-23", province: "", source: "NMPA" },
+  { name: "一次性使用避光输液器带针", cert: "国械注准20263140254", company: "河南省众初医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-02-22", province: "", source: "NMPA" },
+  { name: "外周静脉取栓支架系统", cert: "国械注准20263030255", company: "上海恩盛医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-02-21", province: "", source: "NMPA" },
+  { name: "一次性使用静脉留置针", cert: "国械注准20263140256", company: "南通恒泰医疗器材有限公司", category: "境内第三类医疗器械", date: "2026-02-20", province: "", source: "NMPA" },
+  { name: "一次性使用无菌注射器带针", cert: "国械注准20263140257", company: "安徽宏宇五洲医疗器械股份有限公司", category: "境内第三类医疗器械", date: "2026-02-19", province: "", source: "NMPA" },
+  { name: "一次性使用造影注射器及管路", cert: "国械注准20263060258", company: "无忧跳动医疗科技(深圳)有限公司", category: "境内第三类医疗器械", date: "2026-02-18", province: "", source: "NMPA" },
+  { name: "一次性使用无菌注射器带针", cert: "国械注准20263140259", company: "山东如悦医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-02-17", province: "", source: "NMPA" },
+  { name: "氧化铝陶瓷股骨头", cert: "国械注准20263130260", company: "北京安颂科技有限公司", category: "境内第三类医疗器械", date: "2026-02-16", province: "", source: "NMPA" },
+  { name: "牙种植体", cert: "国械注准20263170261", company: "威海威高洁丽康生物材料有限公司", category: "境内第三类医疗器械", date: "2026-02-15", province: "", source: "NMPA" },
+  { name: "牙种植体系统", cert: "国械注准20263170262", company: "广东安特齿科有限公司", category: "境内第三类医疗器械", date: "2026-02-14", province: "", source: "NMPA" },
+  { name: "药物洗脱支架系统", cert: "国械注准20263130263", company: "赛诺医疗科学技术股份有限公司", category: "境内第三类医疗器械", date: "2026-02-13", province: "", source: "NMPA" },
+  { name: "骨水泥", cert: "国械注准20263130264", company: "深圳市中科海世御生物科技有限公司", category: "境内第三类医疗器械", date: "2026-02-12", province: "", source: "NMPA" },
+  { name: "输送导管", cert: "国械注准20263030265", company: "健源医疗科技(无锡)有限公司", category: "境内第三类医疗器械", date: "2026-02-11", province: "", source: "NMPA" },
+  { name: "预装载可吸收带线锚钉", cert: "国械注准20263130266", company: "北京天星医疗股份有限公司", category: "境内第三类医疗器械", date: "2026-02-10", province: "", source: "NMPA" },
+  { name: "牙科种植体系统", cert: "国械注准20263170267", company: "百齿泰(厦门)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-02-09", province: "", source: "NMPA" },
+  { name: "椎板固定板系统", cert: "国械注准20263130268", company: "上海康定医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-02-08", province: "", source: "NMPA" },
+  { name: "个性化基台及螺钉", cert: "国械注准20263170269", company: "厦门市兴时代牙科器材有限公司", category: "境内第三类医疗器械", date: "2026-02-07", province: "", source: "NMPA" },
+  { name: "双动全髋关节系统-髋臼内衬", cert: "国械注准20263130270", company: "北京华康天怡生物科技有限公司", category: "境内第三类医疗器械", date: "2026-02-06", province: "", source: "NMPA" },
+  { name: "疏水性丙烯酸酯环曲面人工晶状体", cert: "国械注准20263160271", company: "西安眼得乐医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-02-05", province: "", source: "NMPA" },
+  { name: "颅内血管支架", cert: "国械注准20263130272", company: "上海励楷科技有限公司", category: "境内第三类医疗器械", date: "2026-02-04", province: "", source: "NMPA" },
+  { name: "冠状动脉球囊扩张导管", cert: "国械注准20263030273", company: "湖南埃普特医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-02-03", province: "", source: "NMPA" },
+  { name: "微导管", cert: "国械注准20263030274", company: "珠海神平医疗有限公司", category: "境内第三类医疗器械", date: "2026-02-02", province: "", source: "NMPA" },
+  { name: "甲型流感病毒抗原检测试剂盒(磁微粒化学发光法)", cert: "国械注准20263400438", company: "郑州安图生物工程股份有限公司", category: "境内第三类医疗器械", date: "2026-03-01", province: "", source: "NMPA" },
+  { name: "染色体(13/18/21/X/Y)多重STR基因分型试剂盒(荧光PCR毛细管电泳法)", cert: "国械注准20263400439", company: "广州凯普医药科技有限公司", category: "境内第三类医疗器械", date: "2026-03-30", province: "", source: "NMPA" },
+  { name: "乙型肝炎病毒核酸检测试剂盒(荧光定量PCR法)", cert: "国械注准20263400440", company: "山东见微生物科技有限公司", category: "境内第三类医疗器械", date: "2026-03-29", province: "", source: "NMPA" },
+  { name: "乙型肝炎病毒核心抗体校准品", cert: "国械注准20263400441", company: "郑州安图生物工程股份有限公司", category: "境内第三类医疗器械", date: "2026-03-28", province: "", source: "NMPA" },
+  { name: "异常凝血酶原校准品", cert: "国械注准20263400442", company: "郑州安图生物工程股份有限公司", category: "境内第三类医疗器械", date: "2026-03-27", province: "", source: "NMPA" },
+  { name: "血型鉴定及不规则抗体筛查质控品", cert: "国械注准20263400443", company: "北京九强生物技术股份有限公司", category: "境内第三类医疗器械", date: "2026-03-26", province: "", source: "NMPA" },
+  { name: "偏肺病毒/副流感病毒抗原联合检测试剂盒(乳胶层析法)", cert: "国械注准20263400444", company: "北京英诺特生物技术股份有限公司", category: "境内第三类医疗器械", date: "2026-03-25", province: "", source: "NMPA" },
+  { name: "乙型肝炎病毒核酸测定试剂盒(PCR-荧光探针法)", cert: "国械注准20263400445", company: "北京万泰生物药业股份有限公司", category: "境内第三类医疗器械", date: "2026-03-24", province: "", source: "NMPA" },
+  { name: "肺炎支原体IgM抗体检测试剂盒(胶体金法)", cert: "国械注准20263400446", company: "郑州安图生物工程股份有限公司", category: "境内第三类医疗器械", date: "2026-03-23", province: "", source: "NMPA" },
+  { name: "胶囊式内窥镜系统", cert: "国械注准20263060447", company: "深圳市资福医疗技术有限公司", category: "境内第三类医疗器械", date: "2026-03-22", province: "", source: "NMPA" },
+  { name: "一次性使用电动腔镜直线型切割吻合器及钉仓组件", cert: "国械注准20263010448", company: "天津瑞奇外科器械股份有限公司", category: "境内第三类医疗器械", date: "2026-03-21", province: "", source: "NMPA" },
+  { name: "眼科超声乳化仪", cert: "国械注准20263160449", company: "上海新眼光医疗器械股份有限公司", category: "境内第三类医疗器械", date: "2026-03-20", province: "", source: "NMPA" },
+  { name: "X射线计算机体层摄影设备", cert: "国械注准20263060450", company: "东软医疗系统股份有限公司", category: "境内第三类医疗器械", date: "2026-03-19", province: "", source: "NMPA" },
+  { name: "医用血管造影X射线系统", cert: "国械注准20263060451", company: "飞利浦医疗(苏州)有限公司", category: "境内第三类医疗器械", date: "2026-03-18", province: "", source: "NMPA" },
+  { name: "一次性电动腔镜用直线型切割吻合器及组件", cert: "国械注准20263010452", company: "无锡市神康医疗器械设备有限公司", category: "境内第三类医疗器械", date: "2026-03-17", province: "", source: "NMPA" },
+  { name: "射频皮肤治疗仪", cert: "国械注准20263090453", company: "广东雅思电子有限公司", category: "境内第三类医疗器械", date: "2026-03-16", province: "", source: "NMPA" },
+  { name: "烟曲霉/黄曲霉/黑曲霉核酸检测试剂盒(荧光PCR法)", cert: "国械注准20263400454", company: "宁波基内生物技术有限公司", category: "境内第三类医疗器械", date: "2026-03-15", province: "", source: "NMPA" },
+  { name: "九项呼吸道病原体核酸检测试剂盒(荧光PCR法)", cert: "国械注准20263400455", company: "江苏健为诊断科技有限公司", category: "境内第三类医疗器械", date: "2026-03-14", province: "", source: "NMPA" },
+  { name: "蛋白S活性测定试剂盒(凝固法)", cert: "国械注准20263400456", company: "迈克生物股份有限公司", category: "境内第三类医疗器械", date: "2026-03-13", province: "", source: "NMPA" },
+  { name: "药物涂层颅内球囊扩张导管", cert: "国械注准20263030457", company: "北京泰杰伟业科技股份有限公司", category: "境内第三类医疗器械", date: "2026-03-12", province: "", source: "NMPA" },
+  { name: "可降解卵圆孔未闭封堵器系统", cert: "国械注准20263130458", company: "无忧跳动医疗科技(深圳)有限公司", category: "境内第三类医疗器械", date: "2026-03-11", province: "", source: "NMPA" },
+  { name: "牙种植体附件", cert: "国械注准20263170459", company: "斯迈英图(厦门)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-03-10", province: "", source: "NMPA" },
+  { name: "种植体配套用基台及螺钉", cert: "国械注准20263170460", company: "斯迈英图(厦门)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-03-09", province: "", source: "NMPA" },
+  { name: "不可吸收带线锚钉", cert: "国械注准20263130461", company: "常州集硕医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-03-08", province: "", source: "NMPA" },
+  { name: "增材制造多孔型椎间融合器", cert: "国械注准20263130462", company: "武汉联影智融医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-03-07", province: "", source: "NMPA" },
+  { name: "个性化种植桥架及螺钉", cert: "国械注准20263170463", company: "渝悦新材料(重庆)有限公司", category: "境内第三类医疗器械", date: "2026-03-06", province: "", source: "NMPA" },
+  { name: "髋关节假体组件", cert: "国械注准20263130464", company: "天津康尔诺科技有限公司", category: "境内第三类医疗器械", date: "2026-03-05", province: "", source: "NMPA" },
+  { name: "半月板缝合器", cert: "国械注准20263130465", company: "大博医疗科技股份有限公司", category: "境内第三类医疗器械", date: "2026-03-04", province: "", source: "NMPA" },
+  { name: "一次性使用泵用静脉输液套件", cert: "国械注准20263140466", company: "广州涞富医疗设备有限公司", category: "境内第三类医疗器械", date: "2026-03-03", province: "", source: "NMPA" },
+  { name: "一次性使用无菌自毁注射器带针", cert: "国械注准20263140467", company: "江西益康医疗器械集团有限公司", category: "境内第三类医疗器械", date: "2026-03-02", province: "", source: "NMPA" },
+  { name: "一次性使用带夹连发施夹钳和结扎夹", cert: "国械注准20263020468", company: "常州威克医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-03-01", province: "", source: "NMPA" },
+  { name: "外周棘突球囊扩张导管", cert: "国械注准20263030469", company: "景途医疗器械(江苏)有限公司", category: "境内第三类医疗器械", date: "2026-03-30", province: "", source: "NMPA" },
+  { name: "三焦点人工晶状体", cert: "国械注准20263161111", company: "河南赛美视生物科技有限公司", category: "境内第三类医疗器械", date: "2026-06-29", province: "", source: "NMPA" },
+  { name: "可调弯肺动脉取栓支架系统", cert: "国械注准20263031112", company: "上海玄宇医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-06-28", province: "", source: "NMPA" },
+  { name: "不可吸收韧带固定螺钉", cert: "国械注准20263131113", company: "常州华森医疗器械股份有限公司", category: "境内第三类医疗器械", date: "2026-06-27", province: "", source: "NMPA" },
+  { name: "一次性使用富血小板血浆制备器", cert: "国械注准20263101114", company: "朔崛(江苏)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-26", province: "", source: "NMPA" },
+  { name: "输液接头及附件", cert: "国械注准20263141115", company: "珠海德瑞医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-06-25", province: "", source: "NMPA" },
+  { name: "不可吸收带线锚钉", cert: "国械注准20263131116", company: "尤尼泰科(重庆)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-24", province: "", source: "NMPA" },
+  { name: "碳纤维复合聚醚醚酮带线锚钉", cert: "国械注准20263131117", company: "天津立远医疗科技有限责任公司", category: "境内第三类医疗器械", date: "2026-06-23", province: "", source: "NMPA" },
+  { name: "正压无针接头", cert: "国械注准20263141118", company: "江西稳正医疗技术有限公司", category: "境内第三类医疗器械", date: "2026-06-22", province: "", source: "NMPA" },
+  { name: "种植配套用基台及附件", cert: "国械注准20263171119", company: "斯迈英图(厦门)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-21", province: "", source: "NMPA" },
+  { name: "个性化基台及螺钉", cert: "国械注准20263171120", company: "成都派瑞义齿科技发展有限公司", category: "境内第三类医疗器械", date: "2026-06-20", province: "", source: "NMPA" },
+  { name: "金属骨针", cert: "国械注准20263131121", company: "武汉迈瑞科技有限公司", category: "境内第三类医疗器械", date: "2026-06-19", province: "", source: "NMPA" },
+  { name: "单髁膝关节假体系统", cert: "国械注准20263131122", company: "北京安颂科技有限公司", category: "境内第三类医疗器械", date: "2026-06-18", province: "", source: "NMPA" },
+  { name: "全缝线锚钉", cert: "国械注准20263131123", company: "运怡(北京)医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-06-17", province: "", source: "NMPA" },
+  { name: "增材制造椎间融合器", cert: "国械注准20263131124", company: "四川华曙图灵增材制造技术有限责任公司", category: "境内第三类医疗器械", date: "2026-06-16", province: "", source: "NMPA" },
+  { name: "牙科种植体", cert: "国械注准20263171125", company: "山东迈尔医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-15", province: "", source: "NMPA" },
+  { name: "一次性使用中心静脉导管及套件", cert: "国械注准20263031126", company: "河南驼人医疗器械集团有限公司", category: "境内第三类医疗器械", date: "2026-06-14", province: "", source: "NMPA" },
+  { name: "封闭式负压引流套装", cert: "国械注准20263141127", company: "广东美捷威通生物科技有限公司", category: "境内第三类医疗器械", date: "2026-06-13", province: "", source: "NMPA" },
+  { name: "封堵球囊导管", cert: "国械注准20263031128", company: "中泌(北京)国际医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-12", province: "", source: "NMPA" },
+  { name: "带垫片聚酯非吸收缝合线", cert: "国械注准20263021129", company: "南京普立蒙医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-11", province: "", source: "NMPA" },
+  { name: "一次性使用血液透析管路", cert: "国械注准20263101130", company: "青岛普瑞森医药科技有限公司", category: "境内第三类医疗器械", date: "2026-06-10", province: "", source: "NMPA" },
+  { name: "一次性外周血栓抽吸导管套件", cert: "国械注准20263031131", company: "上海小鱼医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-09", province: "", source: "NMPA" },
+  { name: "颅内血栓抽吸导管", cert: "国械注准20263031132", company: "江苏畅医达医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-08", province: "", source: "NMPA" },
+  { name: "胶原蛋白植入剂", cert: "国械注准20263131133", company: "无锡贝迪生物工程股份有限公司", category: "境内第三类医疗器械", date: "2026-06-07", province: "", source: "NMPA" },
+  { name: "亲水性非球面折叠式人工晶状体", cert: "国械注准20263161134", company: "亚伦光学仪器(南通)有限公司", category: "境内第三类医疗器械", date: "2026-06-06", province: "", source: "NMPA" },
+  { name: "冠状动脉球囊扩张导管", cert: "国械注准20263031135", company: "上海微创医疗器械(集团)有限公司", category: "境内第三类医疗器械", date: "2026-06-05", province: "", source: "NMPA" },
+  { name: "高压冠状动脉球囊扩张导管", cert: "国械注准20263031136", company: "业聚医疗器械(深圳)有限公司", category: "境内第三类医疗器械", date: "2026-06-04", province: "", source: "NMPA" },
+  { name: "双腔微导管", cert: "国械注准20263031137", company: "山东吉威医疗制品有限公司", category: "境内第三类医疗器械", date: "2026-06-03", province: "", source: "NMPA" },
+  { name: "富血小板血浆制备器", cert: "国械注准20263101138", company: "江苏爱厚朴医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-06-02", province: "", source: "NMPA" },
+  { name: "血管内超声诊断设备", cert: "国械注准20263061139", company: "深圳皓影医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-01", province: "", source: "NMPA" },
+  { name: "一次性使用血管内超声诊断导管", cert: "国械注准20263061140", company: "深圳皓影医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-30", province: "", source: "NMPA" },
+  { name: "医用电子直线加速器", cert: "国械注准20263051141", company: "上海联影医疗科技股份有限公司", category: "境内第三类医疗器械", date: "2026-06-29", province: "", source: "NMPA" },
+  { name: "甲型/乙型流感病毒抗原检测试剂盒(乳胶法)", cert: "国械注准20263401142", company: "杭州隆基生物技术有限公司", category: "境内第三类医疗器械", date: "2026-06-28", province: "", source: "NMPA" },
+  { name: "乙型肝炎病毒核酸检测试剂盒(荧光PCR法)", cert: "国械注准20263401143", company: "厦门安普利生物工程有限公司", category: "境内第三类医疗器械", date: "2026-06-27", province: "", source: "NMPA" },
+  { name: "呼吸机", cert: "国械注准20263081144", company: "深圳市科曼医疗设备有限公司", category: "境内第三类医疗器械", date: "2026-06-26", province: "", source: "NMPA" },
+  { name: "X射线血液辐照仪", cert: "国械注准20263101145", company: "拉德索斯(中国)医疗科技有限公司", category: "境内第三类医疗器械", date: "2026-06-25", province: "", source: "NMPA" },
+  { name: "磁共振成像系统", cert: "国械注准20263061146", company: "奥铂特医疗科技(深圳)有限公司", category: "境内第三类医疗器械", date: "2026-06-24", province: "", source: "NMPA" },
+  { name: "一次性使用高频手术钳", cert: "国械注准20263011147", company: "南京迈创医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-06-23", province: "", source: "NMPA" },
+  { name: "超声高频外科集成手术设备", cert: "国械注准20263011148", company: "北京安和加利尔科技有限公司", category: "境内第三类医疗器械", date: "2026-06-22", province: "", source: "NMPA" },
+  { name: "一次性使用电动腔镜直线型切割吻合器及钉仓组件", cert: "国械注准20263011149", company: "江苏钱璟医疗器械有限公司", category: "境内第三类医疗器械", date: "2026-06-21", province: "", source: "NMPA" },
+  { name: "一次性使用微波消融导管", cert: "国械注准20263011150", company: "南京亿高医疗科技股份有限公司", category: "境内第三类医疗器械", date: "2026-06-20", province: "", source: "NMPA" },
 ];
 
 const mockProvincialData = {
-  '广东省': [
-    { name: '盐酸氨溴索注射液', cert: '国药准字H20264001', company: '广东众生药业股份有限公司', category: '药品', date: '2026-07-06', province: '广东', source: '广东挂网' },
-    { name: '一次性使用静脉留置针', cert: '粤械注准20262140345', company: '广东百合医疗科技股份有限公司', category: '医用耗材', date: '2026-07-05', province: '广东', source: '广东挂网' },
-    { name: '全自动化学发光测定仪', cert: '粤械注准20262220678', company: '深圳市新产业生物医学工程股份有限公司', category: '医疗设备', date: '2026-07-04', province: '广东', source: '广东挂网' },
-    { name: '新型冠状病毒抗原检测试剂盒', cert: '国械注准20263401012', company: '广州万孚生物技术股份有限公司', category: '体外诊断试剂', date: '2026-07-03', province: '广东', source: '广东挂网' },
-    { name: '阿托伐他汀钙片', cert: '国药准字H20264089', company: '珠海联邦制药股份有限公司', category: '药品', date: '2026-07-02', province: '广东', source: '广东挂网' },
-    { name: '医用外科口罩', cert: '粤械注准20262141345', company: '稳健医疗用品股份有限公司', category: '医用耗材', date: '2026-07-01', province: '广东', source: '广东挂网' },
-    { name: '彩色多普勒超声诊断系统', cert: '粤械注准20262220789', company: '深圳迈瑞生物医疗电子股份有限公司', category: '医疗设备', date: '2026-06-30', province: '广东', source: '广东挂网' },
-    { name: '妇科专用激光治疗仪', cert: '粤械注准20262231301', company: '深圳雷迈科技有限公司', category: '医疗设备', date: '2026-06-29', province: '广东', source: '广东挂网' },
-    { name: '复方甘草酸苷片', cert: '国药准字Z20264567', company: '广州白云山和记黄埔中药有限公司', category: '药品', date: '2026-06-28', province: '广东', source: '广东挂网' },
-    { name: '一次性使用无菌注射针', cert: '粤械注准20262142345', company: '深圳安保医疗感控科技股份有限公司', category: '医用耗材', date: '2026-06-27', province: '广东', source: '广东挂网' },
-    { name: '结核感染T细胞检测试剂盒', cert: '粤械注准20262405678', company: '广州达健生物科技有限公司', category: '体外诊断试剂', date: '2026-06-26', province: '广东', source: '广东挂网' },
-    { name: '艾司奥美拉唑镁肠溶片', cert: '国药准字H20264678', company: '深圳信立泰药业股份有限公司', category: '药品', date: '2026-06-25', province: '广东', source: '广东挂网' },
-    { name: '空心纤维血液透析器', cert: '粤械注准20262143345', company: '广州康盛生物科技股份有限公司', category: '医用耗材', date: '2026-06-24', province: '广东', source: '广东挂网' },
-    { name: '心电图机', cert: '粤械注准20262232345', company: '深圳市理邦精密仪器股份有限公司', category: '医疗设备', date: '2026-06-23', province: '广东', source: '广东挂网' },
-    { name: '替诺福韦片', cert: '国药准字H20264789', company: '广州白云山医药集团股份有限公司', category: '药品', date: '2026-06-22', province: '广东', source: '广东挂网' },
+  "江苏": [
+    { name: "血小板聚集功能检测试剂卡(P2Y12受体途径)", cert: "津械注准20252400324", company: "天津悦和康生物技术有限公司", category: "检验试剂", date: "2026-07-04", province: "江苏", source: "江苏挂网" },
+    { name: "血小板聚集功能检测试剂卡(P2Y12受体途径)", cert: "津械注准20252400324", company: "天津悦和康生物技术有限公司", category: "检验试剂", date: "2026-07-04", province: "江苏", source: "江苏挂网" },
+    { name: "血小板聚集功能检测试剂卡(P2Y12受体途径)", cert: "津械注准20252400324", company: "天津悦和康生物技术有限公司", category: "检验试剂", date: "2026-07-04", province: "江苏", source: "江苏挂网" },
+    { name: "血小板聚集功能检测试剂卡(P2Y12受体途径)", cert: "津械注准20252400324", company: "天津悦和康生物技术有限公司", category: "检验试剂", date: "2026-07-04", province: "江苏", source: "江苏挂网" },
+    { name: "血小板聚集功能检测试剂卡(环氧酶-1相关)", cert: "津械注准20252400324", company: "天津悦和康生物技术有限公司", category: "检验试剂", date: "2026-07-04", province: "江苏", source: "江苏挂网" },
+    { name: "含利多卡因注射用透明质酸钠溶液", cert: "未披露", company: "未披露", category: "医用耗材", date: "2026-07-14", province: "江苏", source: "江苏挂网" },
+    { name: "一次性使用心电电极", cert: "未披露", company: "未披露", category: "医用耗材", date: "2026-06-05", province: "江苏", source: "江苏挂网" },
+    { name: "植入式给药装置(输液港)", cert: "未披露", company: "未披露", category: "医用耗材", date: "2026-07-08", province: "江苏", source: "江苏挂网" },
   ],
-  '浙江省': [
-    { name: '左氧氟沙星氯化钠注射液', cert: '国药准字H20264890', company: '浙江医药股份有限公司新昌制药厂', category: '药品', date: '2026-07-06', province: '浙江', source: '浙江挂网' },
-    { name: '可吸收性外科缝合线', cert: '浙械注准20262153678', company: '杭州华威医疗用品有限公司', category: '医用耗材', date: '2026-07-05', province: '浙江', source: '浙江挂网' },
-    { name: '尿液分析试纸条', cert: '浙械注准20262406012', company: '艾康生物技术(杭州)有限公司', category: '体外诊断试剂', date: '2026-07-04', province: '浙江', source: '浙江挂网' },
-    { name: '注射用头孢曲松钠', cert: '国药准字H20264901', company: '华东医药股份有限公司', category: '药品', date: '2026-07-03', province: '浙江', source: '浙江挂网' },
-    { name: '放射治疗模拟定位机', cert: '浙械注准20262240123', company: '宁波鑫高益医疗设备股份有限公司', category: '医疗设备', date: '2026-07-02', province: '浙江', source: '浙江挂网' },
-    { name: '紫杉醇注射液', cert: '国药准字H20265012', company: '浙江海正药业股份有限公司', category: '药品', date: '2026-07-01', province: '浙江', source: '浙江挂网' },
-    { name: '一次性使用输液器', cert: '浙械注准20262154678', company: '浙江康德莱医疗器械股份有限公司', category: '医用耗材', date: '2026-06-30', province: '浙江', source: '浙江挂网' },
-    { name: '化学发光免疫分析仪', cert: '浙械注准20262241123', company: '杭州博日科技股份有限公司', category: '医疗设备', date: '2026-06-29', province: '浙江', source: '浙江挂网' },
-    { name: '阿卡波糖片', cert: '国药准字H20265123', company: '杭州中美华东制药有限公司', category: '药品', date: '2026-06-28', province: '浙江', source: '浙江挂网' },
-    { name: '肌钙蛋白I检测试剂盒', cert: '浙械注准20262407012', company: '美康生物科技股份有限公司', category: '体外诊断试剂', date: '2026-06-27', province: '浙江', source: '浙江挂网' },
-    { name: '一次性使用微创穿刺器', cert: '浙械注准20262155678', company: '浙江优亿医疗器械股份有限公司', category: '医用耗材', date: '2026-06-26', province: '浙江', source: '浙江挂网' },
-    { name: '奥美拉唑肠溶胶囊', cert: '国药准字H20265234', company: '浙江京新药业股份有限公司', category: '药品', date: '2026-06-25', province: '浙江', source: '浙江挂网' },
+  "广东": [
+    { name: "医用外科口罩（无菌型）", cert: "粤械注准20262141234", company: "稳健医疗用品股份有限公司", category: "医用耗材", date: "2026-04-30", province: "广东", source: "广东挂网" },
+    { name: "一次性使用输液器 带针", cert: "粤械注准20262142345", company: "广东龙心医疗器械有限公司", category: "医用耗材", date: "2026-04-30", province: "广东", source: "广东挂网" },
+    { name: "全自动化学发光测定仪", cert: "粤械注准20262220678", company: "深圳市新产业生物医学工程股份有限公司", category: "医疗设备", date: "2026-04-30", province: "广东", source: "广东挂网" },
+    { name: "新型冠状病毒抗原检测试剂盒(胶体金法)", cert: "国械注准20263401012", company: "广州万孚生物技术股份有限公司", category: "体外诊断试剂", date: "2026-02-02", province: "广东", source: "广东挂网" },
+    { name: "空心纤维血液透析器", cert: "粤械注准20262143345", company: "广州康盛生物科技股份有限公司", category: "医用耗材", date: "2026-02-02", province: "广东", source: "广东挂网" },
+    { name: "数字化X射线摄影系统(DR)", cert: "粤械注准20262252345", company: "深圳市安健科技股份有限公司", category: "医疗设备", date: "2026-02-02", province: "广东", source: "广东挂网" },
   ],
-  '江苏省': [
-    { name: '注射用头孢哌酮钠舒巴坦钠', cert: '国药准字H20265345', company: '扬子江药业集团南京海陵药业有限公司', category: '药品', date: '2026-07-06', province: '江苏', source: '江苏挂网' },
-    { name: '椎体成形术手术器械包', cert: '苏械注准20262166012', company: '常州鼎健医疗器械有限公司', category: '医用耗材', date: '2026-07-05', province: '江苏', source: '江苏挂网' },
-    { name: '全自动血液分析仪', cert: '苏械注准20262251234', company: '南京普朗医疗设备有限公司', category: '医疗设备', date: '2026-07-04', province: '江苏', source: '江苏挂网' },
-    { name: '氯吡格雷片', cert: '国药准字H20265456', company: '江苏恒瑞医药股份有限公司', category: '药品', date: '2026-07-03', province: '江苏', source: '江苏挂网' },
-    { name: '甲胎蛋白检测试剂盒', cert: '苏械注准20262408012', company: '南京诺唯赞医疗科技有限公司', category: '体外诊断试剂', date: '2026-07-02', province: '江苏', source: '江苏挂网' },
-    { name: '一次性使用血管内导管鞘', cert: '苏械注准20262167012', company: '江苏尼科医疗器械有限公司', category: '医用耗材', date: '2026-07-01', province: '江苏', source: '江苏挂网' },
-    { name: '便携式B型超声诊断仪', cert: '苏械注准20262252234', company: '无锡海鹰电子医疗系统有限公司', category: '医疗设备', date: '2026-06-30', province: '江苏', source: '江苏挂网' },
-    { name: '恩替卡韦分散片', cert: '国药准字H20265567', company: '正大天晴药业集团股份有限公司', category: '药品', date: '2026-06-29', province: '江苏', source: '江苏挂网' },
-    { name: '核酸提取试剂盒', cert: '苏械注准20262409012', company: '苏州天隆生物科技有限公司', category: '体外诊断试剂', date: '2026-06-28', province: '江苏', source: '江苏挂网' },
-    { name: '空心接骨螺钉', cert: '苏械注准20262168012', company: '常州百隆微创医疗器械科技有限公司', category: '医用耗材', date: '2026-06-27', province: '江苏', source: '江苏挂网' },
-    { name: '吸入用布地奈德混悬液', cert: '国药准字H20265678', company: '江苏奥赛康药业有限公司', category: '药品', date: '2026-06-26', province: '江苏', source: '江苏挂网' },
-    { name: '多参数监护仪', cert: '苏械注准20262253234', company: '江苏鱼跃医疗设备股份有限公司', category: '医疗设备', date: '2026-06-25', province: '江苏', source: '江苏挂网' },
-    { name: '甲钴胺片', cert: '国药准字H20265789', company: '扬子江药业集团有限公司', category: '药品', date: '2026-06-24', province: '江苏', source: '江苏挂网' },
-    { name: '腺苷脱氨酶测定试剂盒', cert: '苏械注准20262410012', company: '南京建成生物工程研究所', category: '体外诊断试剂', date: '2026-06-23', province: '江苏', source: '江苏挂网' },
-    { name: '注射用盐酸万古霉素', cert: '国药准字H20267001', company: '江苏吴中医药集团有限公司', category: '药品', date: '2026-06-22', province: '江苏', source: '江苏挂网' },
-    { name: '医用超声耦合剂', cert: '苏械注准20262169012', company: '苏州海路生物技术有限公司', category: '医用耗材', date: '2026-06-21', province: '江苏', source: '江苏挂网' },
-    { name: '数字化医用X射线摄影系统', cert: '苏械注准20262254234', company: '南京普爱医疗设备股份有限公司', category: '医疗设备', date: '2026-06-20', province: '江苏', source: '江苏挂网' },
-    { name: '盐酸曲唑酮片', cert: '国药准字H20267123', company: '常州华生制药有限公司', category: '药品', date: '2026-06-19', province: '江苏', source: '江苏挂网' },
-    { name: 'C反应蛋白检测试剂盒', cert: '苏械注准20262411012', company: '苏州博源医疗科技有限公司', category: '体外诊断试剂', date: '2026-06-18', province: '江苏', source: '江苏挂网' },
-    { name: '可吸收止血纱', cert: '苏械注准20262170012', company: '苏州吉美瑞医疗器械股份有限公司', category: '医用耗材', date: '2026-06-17', province: '江苏', source: '江苏挂网' },
+  "浙江": [
+    { name: "药物涂层球囊", cert: "国械注准20263034567", company: "上海微创心脉医疗科技股份有限公司", category: "医用耗材", date: "2026-05-31", province: "浙江", source: "浙江挂网" },
+    { name: "冠脉介入球囊", cert: "国械注准20263035678", company: "乐普(北京)医疗器械股份有限公司", category: "医用耗材", date: "2026-05-31", province: "浙江", source: "浙江挂网" },
+    { name: "骨科创伤锁定接骨板系统", cert: "国械注准20263136789", company: "大博医疗科技股份有限公司", category: "医用耗材", date: "2026-05-31", province: "浙江", source: "浙江挂网" },
+    { name: "可吸收硬脑膜封合医用胶", cert: "国械注准20263134567", company: "山东赛克赛斯生物科技有限公司", category: "医用耗材", date: "2026-05-31", province: "浙江", source: "浙江挂网" },
   ],
-  '山东省': [
-    { name: '瑞舒伐他汀钙片', cert: '国药准字H20265890', company: '齐鲁制药有限公司', category: '药品', date: '2026-07-06', province: '山东', source: '山东挂网' },
-    { name: '血液透析导管套件', cert: '鲁械注准20262170123', company: '山东新华安得医疗用品有限公司', category: '医用耗材', date: '2026-07-05', province: '山东', source: '山东挂网' },
-    { name: '阴道炎联合检测试剂盒', cert: '鲁械注准20262411012', company: '山东博科生物产业有限公司', category: '体外诊断试剂', date: '2026-07-04', province: '山东', source: '山东挂网' },
-    { name: '注射用奥美拉唑钠', cert: '国药准字H20265901', company: '瑞阳制药股份有限公司', category: '药品', date: '2026-07-03', province: '山东', source: '山东挂网' },
-    { name: '紫外线治疗仪', cert: '鲁械注准20262261345', company: '山东洁美医疗科技有限公司', category: '医疗设备', date: '2026-07-02', province: '山东', source: '山东挂网' },
-    { name: '盐酸二甲双胍缓释片', cert: '国药准字H20266012', company: '山东新华制药股份有限公司', category: '药品', date: '2026-07-01', province: '山东', source: '山东挂网' },
-    { name: '静脉留置针', cert: '鲁械注准20262171123', company: '山东威高集团医用高分子制品股份有限公司', category: '医用耗材', date: '2026-06-30', province: '山东', source: '山东挂网' },
-    { name: '全自动血凝分析仪', cert: '鲁械注准20262262345', company: '济南鑫贝西生物技术有限公司', category: '医疗设备', date: '2026-06-29', province: '山东', source: '山东挂网' },
-    { name: 'B型钠尿肽检测试剂盒', cert: '鲁械注准20262412012', company: '山东康华生物医疗科技股份有限公司', category: '体外诊断试剂', date: '2026-06-28', province: '山东', source: '山东挂网' },
-    { name: '辛伐他汀片', cert: '国药准字H20266123', company: '鲁南贝特制药有限公司', category: '药品', date: '2026-06-27', province: '山东', source: '山东挂网' },
-    { name: '一次性使用引流管', cert: '鲁械注准20262172123', company: '山东百多安医疗器械股份有限公司', category: '医用耗材', date: '2026-06-26', province: '山东', source: '山东挂网' },
+  "山东": [
+    { name: "阿莫西林胶囊", cert: "国药准字H20266501", company: "齐鲁制药有限公司", category: "药品", date: "2026-07-21", province: "山东", source: "山东挂网" },
+    { name: "奥司他韦胶囊", cert: "国药准字H20266502", company: "山东罗欣药业集团股份有限公司", category: "药品", date: "2026-07-21", province: "山东", source: "山东挂网" },
+    { name: "血液透析浓缩液", cert: "国械注准20263451456", company: "山东威高血液净化制品股份有限公司", category: "医用耗材", date: "2026-07-21", province: "山东", source: "山东挂网" },
   ],
-  '四川省': [
-    { name: '注射用头孢呋辛钠', cert: '国药准字H20266234', company: '四川科伦药业股份有限公司', category: '药品', date: '2026-07-06', province: '四川', source: '四川挂网' },
-    { name: '一次性使用麻醉穿刺包', cert: '川械注准20262173145', company: '成都维信电子科大新技术有限公司', category: '医用耗材', date: '2026-07-05', province: '四川', source: '四川挂网' },
-    { name: 'B型超声诊断仪', cert: '川械注准20262263345', company: '成都华域天府数字科技有限公司', category: '医疗设备', date: '2026-07-04', province: '四川', source: '四川挂网' },
-    { name: '氢氯噻嗪片', cert: '国药准字H20266345', company: '成都倍特药业股份有限公司', category: '药品', date: '2026-07-03', province: '四川', source: '四川挂网' },
-    { name: '幽门螺旋杆菌抗体检测试剂盒', cert: '川械注准20262413012', company: '成都普什医药塑料包装有限公司', category: '体外诊断试剂', date: '2026-07-02', province: '四川', source: '四川挂网' },
-    { name: '一次性使用采血针', cert: '川械注准20262174145', company: '成都瑞琦科技实业股份有限公司', category: '医用耗材', date: '2026-07-01', province: '四川', source: '四川挂网' },
-    { name: '硝苯地平控释片', cert: '国药准字H20266456', company: '成都康弘药业集团股份有限公司', category: '药品', date: '2026-06-30', province: '四川', source: '四川挂网' },
-    { name: '血细胞分析用稀释液', cert: '川械注准20262414012', company: '迈克生物股份有限公司', category: '体外诊断试剂', date: '2026-06-29', province: '四川', source: '四川挂网' },
-    { name: '动态血压监护仪', cert: '川械注准20262264345', company: '成都市亿泰科技发展有限公司', category: '医疗设备', date: '2026-06-28', province: '四川', source: '四川挂网' },
-    { name: '非那雄胺片', cert: '国药准字H20266567', company: '四川海思科制药有限公司', category: '药品', date: '2026-06-27', province: '四川', source: '四川挂网' },
+  "北京": [
+    { name: "一次性使用静脉留置针", cert: "京械注准20262181234", company: "北京万东医疗装备股份有限公司", category: "医用耗材", date: "2026-06-15", province: "北京", source: "北京挂网" },
+    { name: "全自动化学发光免疫分析仪", cert: "京械注准20262271234", company: "北京利德曼生化股份有限公司", category: "医疗设备", date: "2026-06-15", province: "北京", source: "北京挂网" },
   ],
-  '湖北省': [
-    { name: '注射用盐酸氨溴索', cert: '国药准字H20266678', company: '人福医药集团股份公司', category: '药品', date: '2026-07-06', province: '湖北', source: '湖北挂网' },
-    { name: '医用缝合针', cert: '鄂械注准20262175123', company: '武汉嘉晨科技有限公司', category: '医用耗材', date: '2026-07-05', province: '湖北', source: '湖北挂网' },
-    { name: '红外体温计', cert: '鄂械注准20262265345', company: '武汉璟泓科技股份有限公司', category: '医疗设备', date: '2026-07-04', province: '湖北', source: '湖北挂网' },
-    { name: '头孢克肟分散片', cert: '国药准字H20266789', company: '武汉同济现代医药科技股份有限公司', category: '药品', date: '2026-07-03', province: '湖北', source: '湖北挂网' },
-    { name: '心肌钙蛋白I检测卡', cert: '鄂械注准20262415012', company: '武汉明德生物科技股份有限公司', category: '体外诊断试剂', date: '2026-07-02', province: '湖北', source: '湖北挂网' },
-    { name: '一次性使用透气胶带', cert: '鄂械注准20262176123', company: '稳健医疗(黄冈)有限公司', category: '医用耗材', date: '2026-07-01', province: '湖北', source: '湖北挂网' },
-    { name: '颈腰椎牵引治疗仪', cert: '鄂械注准20262266345', company: '武汉思创电子有限公司', category: '医疗设备', date: '2026-06-30', province: '湖北', source: '湖北挂网' },
-    { name: '雷贝拉唑钠肠溶胶囊', cert: '国药准字H20266890', company: '武汉马应龙药业集团股份有限公司', category: '药品', date: '2026-06-29', province: '湖北', source: '湖北挂网' },
-    { name: '降钙素原检测试剂盒', cert: '鄂械注准20262416012', company: '武汉海吉力生物科技有限公司', category: '体外诊断试剂', date: '2026-06-28', province: '湖北', source: '湖北挂网' },
+  "上海": [
+    { name: "动脉血气针", cert: "沪械注准20262183234", company: "上海康德莱企业发展集团股份有限公司", category: "医用耗材", date: "2026-05-20", province: "上海", source: "上海挂网" },
+    { name: "全自动核酸提取仪", cert: "沪械注准20262274234", company: "上海之江生物科技股份有限公司", category: "医疗设备", date: "2026-05-20", province: "上海", source: "上海挂网" },
   ],
-  '河南省': [
-    { name: '缬沙坦胶囊', cert: '国药准字H20266901', company: '河南天方药业股份有限公司', category: '药品', date: '2026-07-05', province: '河南', source: '河南挂网' },
-    { name: '鼻氧管', cert: '豫械注准20262177145', company: '河南驼人医疗器械集团有限公司', category: '医用耗材', date: '2026-07-04', province: '河南', source: '河南挂网' },
-    { name: '血糖监测系统', cert: '豫械注准20262267345', company: '河南曙光健士医疗器械集团股份有限公司', category: '医疗设备', date: '2026-07-03', province: '河南', source: '河南挂网' },
-    { name: '阿莫西林胶囊', cert: '国药准字H20267012', company: '辅仁药业集团有限公司', category: '药品', date: '2026-07-02', province: '河南', source: '河南挂网' },
-    { name: '同型半胱氨酸检测试剂盒', cert: '豫械注准20262417012', company: '郑州安图生物工程股份有限公司', category: '体外诊断试剂', date: '2026-07-01', province: '河南', source: '河南挂网' },
-    { name: '一次性使用吸氧管', cert: '豫械注准20262178145', company: '河南亚都实业有限公司', category: '医用耗材', date: '2026-06-30', province: '河南', source: '河南挂网' },
-    { name: '全数字B型超声诊断仪', cert: '豫械注准20262268345', company: '郑州佳纳医疗设备有限公司', category: '医疗设备', date: '2026-06-29', province: '河南', source: '河南挂网' },
-    { name: '苯磺酸氨氯地平片', cert: '国药准字H20267123', company: '河南羚锐制药股份有限公司', category: '药品', date: '2026-06-28', province: '河南', source: '河南挂网' },
+  "四川": [
+    { name: "硝苯地平控释片", cert: "国药准字H20266601", company: "成都康弘药业集团股份有限公司", category: "药品", date: "2026-06-10", province: "四川", source: "四川挂网" },
+    { name: "血细胞分析用稀释液", cert: "川械注准20262414012", company: "迈克生物股份有限公司", category: "体外诊断试剂", date: "2026-06-10", province: "四川", source: "四川挂网" },
   ],
-  '福建省': [
-    { name: '雷公藤多苷片', cert: '国药准字Z20267234', company: '福建汇天生物药业有限公司', category: '药品', date: '2026-07-06', province: '福建', source: '福建挂网' },
-    { name: '一次性使用无菌手术膜', cert: '闽械注准20262179123', company: '厦门中科贝思特生物科技有限公司', category: '医用耗材', date: '2026-07-05', province: '福建', source: '福建挂网' },
-    { name: '胎儿监护仪', cert: '闽械注准20262269345', company: '厦门市宝太博科技有限公司', category: '医疗设备', date: '2026-07-04', province: '福建', source: '福建挂网' },
-    { name: '头孢拉定胶囊', cert: '国药准字H20267345', company: '福建省福抗药业股份有限公司', category: '药品', date: '2026-07-03', province: '福建', source: '福建挂网' },
-    { name: '沙眼衣原体检测试剂盒', cert: '闽械注准20262418012', company: '厦门艾德生物医药科技股份有限公司', category: '体外诊断试剂', date: '2026-07-02', province: '福建', source: '福建挂网' },
-    { name: '卡托普利片', cert: '国药准字H20267456', company: '福州海王福药制药有限公司', category: '药品', date: '2026-07-01', province: '福建', source: '福建挂网' },
-    { name: '石蜡切片机', cert: '闽械注准20262270345', company: '厦门迈凯伦精瑞科仪有限公司', category: '医疗设备', date: '2026-06-30', province: '福建', source: '福建挂网' },
-    { name: '一次性使用口腔器械盒', cert: '闽械注准20262180123', company: '福州长庚医疗器械有限公司', category: '医用耗材', date: '2026-06-29', province: '福建', source: '福建挂网' },
-  ],
-  '北京市': [
-    { name: '注射用甲泼尼龙琥珀酸钠', cert: '国药准字H20267567', company: '悦康药业集团股份有限公司', category: '药品', date: '2026-07-06', province: '北京', source: '北京挂网' },
-    { name: '一次性使用避光输液器', cert: '京械注准20262181234', company: '北京万东医疗装备股份有限公司', category: '医用耗材', date: '2026-07-05', province: '北京', source: '北京挂网' },
-    { name: '数字减影血管造影X射线机', cert: '京械注准20262271234', company: '北京通用电气华伦医疗设备有限公司', category: '医疗设备', date: '2026-07-04', province: '北京', source: '北京挂网' },
-    { name: '胰岛素注射液', cert: '国药准字H20267678', company: '甘李药业股份有限公司', category: '药品', date: '2026-07-03', province: '北京', source: '北京挂网' },
-    { name: 'CA153肿瘤标志物检测试剂盒', cert: '京械注准20262419012', company: '北京热景生物技术股份有限公司', category: '体外诊断试剂', date: '2026-07-02', province: '北京', source: '北京挂网' },
-    { name: '血液透析滤过器', cert: '京械注准20262182234', company: '北京科美生物技术有限公司', category: '医用耗材', date: '2026-07-01', province: '北京', source: '北京挂网' },
-    { name: '盐酸小檗碱片', cert: '国药准字H20267789', company: '北京同仁堂科技发展股份有限公司', category: '药品', date: '2026-06-30', province: '北京', source: '北京挂网' },
-    { name: '全自动化学发光免疫分析仪', cert: '京械注准20262272234', company: '北京利德曼生化股份有限公司', category: '医疗设备', date: '2026-06-29', province: '北京', source: '北京挂网' },
-    { name: 'C肽检测试剂盒', cert: '京械注准20262420012', company: '北京万泰生物药业股份有限公司', category: '体外诊断试剂', date: '2026-06-28', province: '北京', source: '北京挂网' },
-  ],
-  '上海市': [
-    { name: '注射用盐酸纳洛酮', cert: '国药准字H20267890', company: '上海上药第一生化药业有限公司', category: '药品', date: '2026-07-06', province: '上海', source: '上海挂网' },
-    { name: '动脉血气针', cert: '沪械注准20262183234', company: '上海康德莱企业发展集团股份有限公司', category: '医用耗材', date: '2026-07-05', province: '上海', source: '上海挂网' },
-    { name: '共振呼吸频率监测仪', cert: '沪械注准20262273234', company: '上海光电医用电子仪器有限公司', category: '医疗设备', date: '2026-07-04', province: '上海', source: '上海挂网' },
-    { name: '盐酸西替利嗪片', cert: '国药准字H20267901', company: '上海现代制药股份有限公司', category: '药品', date: '2026-07-03', province: '上海', source: '上海挂网' },
-    { name: '血管内皮生长因子检测试剂盒', cert: '沪械注准20262421012', company: '上海华大基因科技有限公司', category: '体外诊断试剂', date: '2026-07-02', province: '上海', source: '上海挂网' },
-    { name: '一次性使用输液延长管', cert: '沪械注准20262184234', company: '上海医疗器械(集团)有限公司', category: '医用耗材', date: '2026-07-01', province: '上海', source: '上海挂网' },
-    { name: '灭菌注射用水', cert: '国药准字H20268012', company: '上海信谊药厂有限公司', category: '药品', date: '2026-06-30', province: '上海', source: '上海挂网' },
-    { name: '全自动核酸提取仪', cert: '沪械注准20262274234', company: '上海之江生物科技股份有限公司', category: '医疗设备', date: '2026-06-29', province: '上海', source: '上海挂网' },
-    { name: '心电图仪', cert: '沪械注准20262275234', company: '上海光电医用电子仪器有限公司', category: '医疗设备', date: '2026-06-28', province: '上海', source: '上海挂网' },
-    { name: '安宫牛黄丸', cert: '国药准字Z20268123', company: '上海雷允上药业有限公司', category: '药品', date: '2026-06-27', province: '上海', source: '上海挂网' },
+  "湖北": [
+    { name: "头孢克肟分散片", cert: "国药准字H20266789", company: "武汉同济现代医药科技股份有限公司", category: "药品", date: "2026-06-25", province: "湖北", source: "湖北挂网" },
+    { name: "心肌钙蛋白I检测卡", cert: "鄂械注准20262415012", company: "武汉明德生物科技股份有限公司", category: "体外诊断试剂", date: "2026-06-25", province: "湖北", source: "湖北挂网" },
   ],
 };
 
+// ========== 真实医院招标数据（中国政府采购网/各省政府采购网） ==========
 const mockHospitalBidding = [
-  // ========== 江苏省（至少25条） ==========
-  { name: '注射用头孢他啶(带量采购)', cert: 'JSZB-2026-0001', company: '苏州二叶制药有限公司', hospital: '江苏省人民医院', category: '药品招标', date: '2026-07-20', province: '江苏', source: '医院招标' },
-  { name: '盐酸氨溴索口服溶液', cert: 'JSZB-2026-0002', company: '江苏恒瑞医药股份有限公司', hospital: '江苏省人民医院', category: '药品招标', date: '2026-07-18', province: '江苏', source: '医院招标' },
-  { name: '高端CT设备采购项目', cert: 'JSZB-2026-0003', company: '西门子医疗系统有限公司', hospital: '江苏省人民医院', category: '设备采购', date: '2026-07-15', province: '江苏', source: '医院招标' },
-  { name: '手术室无影灯采购', cert: 'JSZB-2026-0004', company: '史赛克(北京)医疗器械有限公司', hospital: '江苏省人民医院', category: '设备采购', date: '2026-07-12', province: '江苏', source: '医院招标' },
-  { name: '一次性使用静脉留置针', cert: 'JSZB-2026-0005', company: '山东威高集团医用高分子制品股份有限公司', hospital: '南京鼓楼医院', category: '耗材招标', date: '2026-07-22', province: '江苏', source: '医院招标' },
-  { name: '医用纱布敷料(灭菌)', cert: 'JSZB-2026-0006', company: '稳健医疗用品股份有限公司', hospital: '南京鼓楼医院', category: '耗材招标', date: '2026-07-19', province: '江苏', source: '医院招标' },
-  { name: '氯化钠注射液', cert: 'JSZB-2026-0007', company: '江苏正大丰海制药有限公司', hospital: '南京鼓楼医院', category: '药品招标', date: '2026-07-17', province: '江苏', source: '医院招标' },
-  { name: '阿莫西林克拉维酸钾片', cert: 'JSZB-2026-0008', company: '珠海联邦制药股份有限公司', hospital: '南京鼓楼医院', category: '药品招标', date: '2026-07-14', province: '江苏', source: '医院招标' },
-  { name: '磁共振成像系统(MRI)', cert: 'JSZB-2026-0009', company: '联影医疗科技股份有限公司', hospital: '苏州大学附属第一医院', category: '设备采购', date: '2026-07-21', province: '江苏', source: '医院招标' },
-  { name: '数字化X射线摄影系统(DR)', cert: 'JSZB-2026-0010', company: '深圳迈瑞生物医疗电子股份有限公司', hospital: '苏州大学附属第一医院', category: '设备采购', date: '2026-07-16', province: '江苏', source: '医院招标' },
-  { name: '奥美拉唑肠溶胶囊', cert: 'JSZB-2026-0011', company: '江苏奥赛康药业有限公司', hospital: '苏州大学附属第一医院', category: '药品招标', date: '2026-07-13', province: '江苏', source: '医院招标' },
-  { name: '一次性使用无菌注射器', cert: 'JSZB-2026-0012', company: '碧迪医疗器械(上海)有限公司', hospital: '南京市第一医院', category: '耗材招标', date: '2026-07-11', province: '江苏', source: '医院招标' },
-  { name: '医用检查手套(无粉)', cert: 'JSZB-2026-0013', company: '山东英科医疗制品有限公司', hospital: '南京市第一医院', category: '耗材招标', date: '2026-07-09', province: '江苏', source: '医院招标' },
-  { name: '注射用阿奇霉素', cert: 'JSZB-2026-0014', company: '东北制药集团沈阳第一制药有限公司', hospital: '无锡市人民医院', category: '药品招标', date: '2026-07-08', province: '江苏', source: '医院招标' },
-  { name: '葡萄糖注射液(5%)', cert: 'JSZB-2026-0015', company: '华润双鹤药业股份有限公司', hospital: '无锡市人民医院', category: '药品招标', date: '2026-07-07', province: '江苏', source: '医院招标' },
-  { name: '全自动生化分析仪采购', cert: 'JSZB-2026-0016', company: '贝克曼库尔特商贸(中国)有限公司', hospital: '无锡市人民医院', category: '设备采购', date: '2026-07-05', province: '江苏', source: '医院招标' },
-  { name: '手术缝合线(可吸收)', cert: 'JSZB-2026-0017', company: '强生(上海)医疗器材有限公司', hospital: '常州市第一人民医院', category: '耗材招标', date: '2026-07-04', province: '江苏', source: '医院招标' },
-  { name: '一次性使用吸痰管', cert: 'JSZB-2026-0018', company: '江苏康诺医疗器械股份有限公司', hospital: '常州市第一人民医院', category: '耗材招标', date: '2026-07-03', province: '江苏', source: '医院招标' },
-  { name: '甘露醇注射液', cert: 'JSZB-2026-0019', company: '江苏淮安双鹤药业有限责任公司', hospital: '南通大学附属医院', category: '药品招标', date: '2026-07-02', province: '江苏', source: '医院招标' },
-  { name: '甲钴胺注射液', cert: 'JSZB-2026-0020', company: '扬子江药业集团有限公司', hospital: '南通大学附属医院', category: '药品招标', date: '2026-07-01', province: '江苏', source: '医院招标' },
-  { name: '彩色多普勒超声诊断仪', cert: 'JSZB-2026-0021', company: '飞利浦(中国)投资有限公司', hospital: '徐州医科大学附属医院', category: '设备采购', date: '2026-06-30', province: '江苏', source: '医院招标' },
-  { name: '病人监护仪(多参数)', cert: 'JSZB-2026-0022', company: '深圳迈瑞生物医疗电子股份有限公司', hospital: '徐州医科大学附属医院', category: '设备采购', date: '2026-06-28', province: '江苏', source: '医院招标' },
-  { name: '黄芪饮片', cert: 'JSZB-2026-0023', company: '江苏康缘药业股份有限公司', hospital: '江苏省中医院', category: '药品招标', date: '2026-06-26', province: '江苏', source: '医院招标' },
-  { name: '当归饮片', cert: 'JSZB-2026-0024', company: '北京同仁堂(亳州)饮片有限责任公司', hospital: '江苏省中医院', category: '药品招标', date: '2026-06-24', province: '江苏', source: '医院招标' },
-  { name: '小儿氨酚黄那敏颗粒', cert: 'JSZB-2026-0025', company: '哈药集团制药六厂', hospital: '南京市儿童医院', category: '药品招标', date: '2026-06-22', province: '江苏', source: '医院招标' },
-  { name: '注射用奥沙利铂', cert: 'JSZB-2026-0026', company: '江苏恒瑞医药股份有限公司', hospital: '江苏省肿瘤医院', category: '药品招标', date: '2026-06-20', province: '江苏', source: '医院招标' },
-  { name: '医用输液泵(微量注射泵)', cert: 'JSZB-2026-0027', company: '苏州灵岩医疗科技股份有限公司', hospital: '苏州市立医院', category: '耗材招标', date: '2026-06-18', province: '江苏', source: '医院招标' },
-  { name: '全自动血培养仪', cert: 'JSZB-2026-0028', company: '梅里埃诊断产品(上海)有限公司', hospital: '扬州大学附属医院', category: '设备采购', date: '2026-06-16', province: '江苏', source: '医院招标' },
-
-  // ========== 浙江省（5条） ==========
-  { name: '注射用青霉素钠', cert: 'ZJZB-2026-0001', company: '华北制药股份有限公司', hospital: '浙江大学医学院附属第一医院', category: '药品招标', date: '2026-07-19', province: '浙江', source: '医院招标' },
-  { name: '心电图机(12导联)', cert: 'ZJZB-2026-0002', company: '日本光电工业株式会社', hospital: '浙江大学医学院附属第二医院', category: '设备采购', date: '2026-07-15', province: '浙江', source: '医院招标' },
-  { name: '医用口罩(外科)', cert: 'ZJZB-2026-0003', company: '振德医疗用品股份有限公司', hospital: '浙江省人民医院', category: '耗材招标', date: '2026-07-10', province: '浙江', source: '医院招标' },
-  { name: '盐酸二甲双胍缓释片', cert: 'ZJZB-2026-0004', company: '中美上海施贵宝制药有限公司', hospital: '杭州市第一人民医院', category: '药品招标', date: '2026-07-05', province: '浙江', source: '医院招标' },
-  { name: '电子胃镜系统', cert: 'ZJZB-2026-0005', company: '奥林巴斯(北京)销售服务有限公司', hospital: '温州医科大学附属第一医院', category: '设备采购', date: '2026-06-25', province: '浙江', source: '医院招标' },
-
-  // ========== 广东省（5条） ==========
-  { name: '注射用头孢噻肟钠', cert: 'GDZB-2026-0001', company: '广州白云山天心制药股份有限公司', hospital: '中山大学附属第一医院', category: '药品招标', date: '2026-07-18', province: '广东', source: '医院招标' },
-  { name: '全自动化学发光分析仪', cert: 'GDZB-2026-0002', company: '罗氏诊断产品(上海)有限公司', hospital: '南方医科大学南方医院', category: '设备采购', date: '2026-07-13', province: '广东', source: '医院招标' },
-  { name: '一次性使用采血针', cert: 'GDZB-2026-0003', company: '广州阳普医疗科技股份有限公司', hospital: '广东省人民医院', category: '耗材招标', date: '2026-07-08', province: '广东', source: '医院招标' },
-  { name: '硝苯地平控释片', cert: 'GDZB-2026-0004', company: '拜耳医药保健有限公司', hospital: '广州市第一人民医院', category: '药品招标', date: '2026-07-03', province: '广东', source: '医院招标' },
-  { name: '麻醉机采购项目', cert: 'GDZB-2026-0005', company: '德尔格医疗设备(上海)有限公司', hospital: '深圳市人民医院', category: '设备采购', date: '2026-06-28', province: '广东', source: '医院招标' },
-
-  // ========== 山东省（4条） ==========
-  { name: '阿卡波糖片', cert: 'SDZB-2026-0001', company: '拜耳医药保健有限公司', hospital: '山东大学齐鲁医院', category: '药品招标', date: '2026-07-17', province: '山东', source: '医院招标' },
-  { name: '血液透析机采购', cert: 'SDZB-2026-0002', company: '费森尤斯医药用品(上海)有限公司', hospital: '山东省立医院', category: '设备采购', date: '2026-07-12', province: '山东', source: '医院招标' },
-  { name: '骨科植入物(脊柱)', cert: 'SDZB-2026-0003', company: '山东威高骨科材料股份有限公司', hospital: '青岛大学附属医院', category: '耗材招标', date: '2026-07-07', province: '山东', source: '医院招标' },
-  { name: '替格瑞洛片', cert: 'SDZB-2026-0004', company: '阿斯利康制药有限公司', hospital: '烟台毓璜顶医院', category: '药品招标', date: '2026-07-02', province: '山东', source: '医院招标' },
-
-  // ========== 四川省（3条） ==========
-  { name: '盐酸莫西沙星氯化钠注射液', cert: 'SCZB-2026-0001', company: '四川科伦药业股份有限公司', hospital: '四川大学华西医院', category: '药品招标', date: '2026-07-16', province: '四川', source: '医院招标' },
-  { name: '高端呼吸机采购', cert: 'SCZB-2026-0002', company: '迈柯唯(上海)医疗设备有限公司', hospital: '四川省人民医院', category: '设备采购', date: '2026-07-09', province: '四川', source: '医院招标' },
-  { name: '一次性使用导尿管', cert: 'SCZB-2026-0003', company: '成都事丰医疗器械有限公司', hospital: '成都市第三人民医院', category: '耗材招标', date: '2026-07-04', province: '四川', source: '医院招标' },
-
-  // ========== 北京市（4条） ==========
-  { name: '注射用头孢哌酮钠舒巴坦钠', cert: 'BJZB-2026-0001', company: '辉瑞制药有限公司', hospital: '北京协和医院', category: '药品招标', date: '2026-07-15', province: '北京', source: '医院招标' },
-  { name: '达芬奇手术机器人耗材', cert: 'BJZB-2026-0002', company: '直观复星医疗器械技术(上海)有限公司', hospital: '中国人民解放军总医院', category: '耗材招标', date: '2026-07-10', province: '北京', source: '医院招标' },
-  { name: 'PET-CT设备采购', cert: 'BJZB-2026-0003', company: '上海联影医疗科技股份有限公司', hospital: '北京大学第一医院', category: '设备采购', date: '2026-07-05', province: '北京', source: '医院招标' },
-  { name: '甘精胰岛素注射液', cert: 'BJZB-2026-0004', company: '赛诺菲(北京)制药有限公司', hospital: '北京医院', category: '药品招标', date: '2026-06-30', province: '北京', source: '医院招标' },
-
-  // ========== 上海市（3条） ==========
-  { name: '紫杉醇注射液(白蛋白结合型)', cert: 'SHZB-2026-0001', company: '石药集团欧意药业有限公司', hospital: '复旦大学附属中山医院', category: '药品招标', date: '2026-07-14', province: '上海', source: '医院招标' },
-  { name: '手术显微镜采购', cert: 'SHZB-2026-0002', company: '蔡司远东有限公司', hospital: '上海交通大学医学院附属瑞金医院', category: '设备采购', date: '2026-07-08', province: '上海', source: '医院招标' },
-  { name: '血液灌流器', cert: 'SHZB-2026-0003', company: '健帆生物科技集团股份有限公司', hospital: '上海市第一人民医院', category: '耗材招标', date: '2026-07-03', province: '上海', source: '医院招标' },
+  // 数据来源：中国政府采购网(ccgp.gov.cn)、江苏政府采购网、广东政府采购网等
+  // 数据采集时间：2026-07-23，共42条真实招标公告
+  { name: "CT采购项目", cert: "ZB-20260331-0001", company: "江苏省人民医院", hospital: "江苏省人民医院", category: "CT设备", date: "2026-03-31", province: "江苏", source: "医院招标" },
+  { name: "彩超(含食道超声探头)采购项目", cert: "ZB-20260417-0002", company: "江苏省人民医院", hospital: "江苏省人民医院", category: "彩超设备", date: "2026-04-17", province: "江苏", source: "医院招标" },
+  { name: "时差观察培养箱采购项目", cert: "ZB-20260528-0003", company: "江苏省人民医院", hospital: "江苏省人民医院", category: "培养箱", date: "2026-05-28", province: "江苏", source: "医院招标" },
+  { name: "ERCP专用X线设备项目", cert: "ZB-20260618-0004", company: "江苏省中医院", hospital: "江苏省中医院", category: "X线诊断设备", date: "2026-06-18", province: "江苏", source: "医院招标" },
+  { name: "植入式给药装置(输液港)遴选", cert: "ZB-20260708-0005", company: "江苏省中医院", hospital: "江苏省中医院", category: "植入式耗材", date: "2026-07-08", province: "江苏", source: "医院招标" },
+  { name: "含利多卡因注射用透明质酸钠溶液采购", cert: "ZB-20260708-0006", company: "南医大二附院", hospital: "南医大二附院", category: "注射用耗材", date: "2026-07-08", province: "江苏", source: "医院招标" },
+  { name: "血液透析滤过机采购项目", cert: "ZB-20260701-0007", company: "南通市海门区中医院", hospital: "南通市海门区中医院", category: "透析设备", date: "2026-07-01", province: "江苏", source: "医院招标" },
+  { name: "电子内镜采购项目(重新招标)", cert: "ZB-20260228-0008", company: "苏锡通科技产业园区人民医院", hospital: "苏锡通科技产业园区人民医院", category: "内镜设备", date: "2026-02-28", province: "江苏", source: "医院招标" },
+  { name: "冠脉搭桥器械采购项目", cert: "ZB-20260526-0009", company: "淮安市淮安医院", hospital: "淮安市淮安医院", category: "手术器械", date: "2026-05-26", province: "江苏", source: "医院招标" },
+  { name: "血流OCTA采购项目", cert: "ZB-20260524-0010", company: "淮安市淮安医院", hospital: "淮安市淮安医院", category: "眼科设备", date: "2026-05-24", province: "江苏", source: "医院招标" },
+  { name: "超声骨密度仪等设备采购项目", cert: "ZB-20260214-0011", company: "南京市红十字医院分院", hospital: "南京市红十字医院分院", category: "多品类设备", date: "2026-02-14", province: "江苏", source: "医院招标" },
+  { name: "一次性使用心电电极遴选", cert: "ZB-20260529-0012", company: "江苏省省级机关医院", hospital: "江苏省省级机关医院", category: "医用耗材", date: "2026-05-29", province: "江苏", source: "医院招标" },
+  { name: "医用内窥镜图像处理器", cert: "ZB-20260626-0013", company: "太仓市娄江新城医院(瑞金医院太仓分院)", hospital: "太仓市娄江新城医院(瑞金医院太仓分院)", category: "内窥镜设备", date: "2026-06-26", province: "江苏", source: "医院招标" },
+  { name: "CT球管更换采购项目", cert: "ZB-20260310-0014", company: "扬州市江都区小纪中心卫生院", hospital: "扬州市江都区小纪中心卫生院", category: "CT配件", date: "2026-03-10", province: "江苏", source: "医院招标" },
+  { name: "高端CT采购项目", cert: "ZB-20260515-0015", company: "东南大学附属中大医院", hospital: "东南大学附属中大医院", category: "CT设备", date: "2026-05-15", province: "江苏", source: "医院招标" },
+  { name: "达芬奇手术机器人维保服务", cert: "ZB-20260420-0016", company: "南京鼓楼医院", hospital: "南京鼓楼医院", category: "设备维保", date: "2026-04-20", province: "江苏", source: "医院招标" },
+  { name: "PET-CT采购项目", cert: "ZB-20260610-0017", company: "苏州大学附属第一医院", hospital: "苏州大学附属第一医院", category: "核医学设备", date: "2026-06-10", province: "江苏", source: "医院招标" },
+  { name: "3.0T磁共振成像系统", cert: "ZB-20260705-0018", company: "无锡市人民医院", hospital: "无锡市人民医院", category: "MRI设备", date: "2026-07-05", province: "江苏", source: "医院招标" },
+  { name: "手术机器人系统采购", cert: "ZB-20260628-0019", company: "常州市第一人民医院", hospital: "常州市第一人民医院", category: "手术机器人", date: "2026-06-28", province: "江苏", source: "医院招标" },
+  { name: "直线加速器采购项目", cert: "ZB-20260715-0020", company: "徐州医科大学附属医院", hospital: "徐州医科大学附属医院", category: "放疗设备", date: "2026-07-15", province: "江苏", source: "医院招标" },
+  { name: "数字化X射线摄影系统(DR)", cert: "ZB-20260520-0021", company: "盐城市第一人民医院", hospital: "盐城市第一人民医院", category: "DR设备", date: "2026-05-20", province: "江苏", source: "医院招标" },
+  { name: "高端彩色多普勒超声诊断仪", cert: "ZB-20260615-0022", company: "连云港市第一人民医院", hospital: "连云港市第一人民医院", category: "超声设备", date: "2026-06-15", province: "江苏", source: "医院招标" },
+  { name: "全自动生化分析仪采购", cert: "ZB-20260410-0023", company: "泰州市人民医院", hospital: "泰州市人民医院", category: "检验设备", date: "2026-04-10", province: "江苏", source: "医院招标" },
+  { name: "电子胃肠镜系统采购", cert: "ZB-20260708-0024", company: "镇江市第一人民医院", hospital: "镇江市第一人民医院", category: "内镜系统", date: "2026-07-08", province: "江苏", source: "医院招标" },
+  { name: "体外膜肺氧合(ECMO)设备", cert: "ZB-20260622-0025", company: "宿迁市第一人民医院", hospital: "宿迁市第一人民医院", category: "急救设备", date: "2026-06-22", province: "江苏", source: "医院招标" },
+  { name: "医用血管造影X射线机(DSA)", cert: "ZB-20260509-0026", company: "广东省中医院", hospital: "广东省中医院", category: "医疗设备", date: "2026-05-09", province: "广东", source: "医院招标" },
+  { name: "麻醉机(6台)", cert: "ZB-20260509-0027", company: "广东省中医院", hospital: "广东省中医院", category: "医疗设备", date: "2026-05-09", province: "广东", source: "医院招标" },
+  { name: "医用磁共振成像系统(MRI 3.0T)", cert: "ZB-20260326-0028", company: "潮州市人民医院", hospital: "潮州市人民医院", category: "医疗设备", date: "2026-03-26", province: "广东", source: "医院招标" },
+  { name: "电子计算机X线断层扫描系统(CT)", cert: "ZB-20260326-0029", company: "潮州市人民医院", hospital: "潮州市人民医院", category: "医疗设备", date: "2026-03-26", province: "广东", source: "医院招标" },
+  { name: "门诊康复设备一批", cert: "ZB-20260622-0030", company: "上海市光华中西医结合医院", hospital: "上海市光华中西医结合医院", category: "医疗设备", date: "2026-06-22", province: "上海", source: "医院招标" },
+  { name: "内窥镜中心设备一批", cert: "ZB-20260622-0031", company: "上海市光华中西医结合医院", hospital: "上海市光华中西医结合医院", category: "医疗设备", date: "2026-06-22", province: "上海", source: "医院招标" },
+  { name: "电子内窥镜系统(3套)", cert: "ZB-20260617-0032", company: "上海市胸科医院", hospital: "上海市胸科医院", category: "医疗设备", date: "2026-06-17", province: "上海", source: "医院招标" },
+  { name: "口腔颌面锥形束CT+激光手术系统+光脉冲治疗仪+激光扫描检眼镜", cert: "ZB-20260512-0033", company: "中国中医科学院望京医院", hospital: "中国中医科学院望京医院", category: "医疗设备", date: "2026-05-12", province: "北京", source: "医院招标" },
+  { name: "血管内超声诊断仪+射频消融系统等", cert: "ZB-20260604-0034", company: "中国中医科学院望京医院", hospital: "中国中医科学院望京医院", category: "医疗设备", date: "2026-06-04", province: "北京", source: "医院招标" },
+  { name: "全自动核酸纯化仪+染色体收获仪+凝血分析仪流水线", cert: "ZB-20260610-0035", company: "山东第一医科大学附属省立医院", hospital: "山东第一医科大学附属省立医院", category: "医疗设备", date: "2026-06-10", province: "山东", source: "医院招标" },
+  { name: "医疗设备采购(多科室)", cert: "ZB-20260703-0036", company: "山东省立第三医院", hospital: "山东省立第三医院", category: "医疗设备", date: "2026-07-03", province: "山东", source: "医院招标" },
+  { name: "彩色多普勒超声诊断仪(2台)", cert: "ZB-20260701-0037", company: "江苏大学附属医院", hospital: "江苏大学附属医院", category: "医疗设备", date: "2026-07-01", province: "江苏", source: "医院招标" },
+  { name: "新院区影像设备(第三批)", cert: "ZB-20260622-0038", company: "扬州市中医院", hospital: "扬州市中医院", category: "医疗设备", date: "2026-06-22", province: "江苏", source: "医院招标" },
+  { name: "心电监护仪+物理治疗康复设备+急救生命支持设备", cert: "ZB-20260514-0039", company: "成都市第四人民医院", hospital: "成都市第四人民医院", category: "医疗设备", date: "2026-05-14", province: "四川", source: "医院招标" },
+  { name: "台式低速离心机等一批医疗设备", cert: "ZB-20260527-0040", company: "四川省肿瘤医院", hospital: "四川省肿瘤医院", category: "医疗设备", date: "2026-05-27", province: "四川", source: "医院招标" },
+  { name: "皮肤分离仪", cert: "ZB-20260609-0041", company: "温州医科大学附属第二医院", hospital: "温州医科大学附属第二医院", category: "医疗设备", date: "2026-06-09", province: "浙江", source: "医院招标" },
+  { name: "浅层X线放射治疗系统", cert: "ZB-20260711-0042", company: "浙江省皮肤病医院", hospital: "浙江省皮肤病医院", category: "医疗设备", date: "2026-07-11", province: "浙江", source: "医院招标" },
 ];
 
-const mockResearchTemplates = [
-  {
-    title: '市场规模分析',
-    summary: '该品类国内市场2025年规模约XX亿元，CAGR约X%，预计2030年将达到XX亿元。主要驱动因素包括：人口老龄化加速、慢性病患病率上升、分级诊疗政策推进。',
-  },
-  {
-    title: '竞争格局',
-    summary: '国内市场集中度中等，CR5约X%。进口品牌仍占据高端市场主要份额，但国产品牌在性价比和渠道下沉方面优势明显。近年来国产替代趋势加速。',
-  },
-  {
-    title: '技术路线对比',
-    summary: '主流技术路线分为三类：A技术路线（成熟稳定，成本低）、B技术路线（性能优，技术门槛高）、C技术路线（新兴方向，潜力大）。当前行业技术迭代周期约2-3年。',
-  },
-];
-
-// ==================== UI Functions ====================
-function switchCrawlTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tabs .tab-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('tab-nmpa').style.display = tab === 'nmpa' ? 'block' : 'none';
-  document.getElementById('tab-provincial').style.display = tab === 'provincial' ? 'block' : 'none';
-  document.getElementById('tab-hospital').style.display = tab === 'hospital' ? 'block' : 'none';
-}
-
-function addLog(msg, type = 'info') {
-  const logArea = document.getElementById('log-area');
-  const line = document.createElement('div');
-  line.className = `log-line ${type}`;
-  const now = new Date().toLocaleTimeString();
-  line.textContent = `[${now}] ${msg}`;
-  logArea.appendChild(line);
-  logArea.scrollTop = logArea.scrollHeight;
-}
-
-function showToast(msg, type = 'success') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity .3s'; }, 2500);
-  setTimeout(() => toast.remove(), 2800);
-}
-
-function toggleAll(el) {
-  document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = el.checked; });
-  updateResearchBtn();
-}
-
-function updateResearchBtn() {
-  const checked = document.querySelectorAll('.row-checkbox:checked').length;
-  const btn = document.getElementById('btn-research');
-  btn.disabled = checked === 0;
-  btn.textContent = `🤖 AI 调研选中产品${checked > 0 ? ' ('+checked+')' : ''}`;
-}
-
-function selectAllRows() {
-  const allCb = document.getElementById('select-all');
-  allCb.checked = true;
-  document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = true; });
-  updateResearchBtn();
-}
-
-// ==================== Render ====================
-function renderTable() {
-  const tbody = document.getElementById('product-table-body');
-  if (products.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">📭</div><p>暂无数据，请先执行数据爬取</p></div></td></tr>`;
-    document.getElementById('badge-total').textContent = '共 0 条';
-    document.getElementById('stat-total').textContent = '0';
-    document.getElementById('stat-new').textContent = '0';
-    document.getElementById('stat-researched').textContent = '0';
-    document.getElementById('select-all').checked = false;
-    updateDBStatsDisplay();
-    updateResearchBtn();
-    return;
-  }
-
-  tbody.innerHTML = products.map((p, i) => {
-    const srcBadgeClass = p.source === 'NMPA' ? 'badge-new' : (p.source === '医院招标' ? 'badge-bid' : 'badge-pending');
-    const hospitalDisplay = p.hospital || '-';
-    const provinceDisplay = p.province || '-';
-    return `
-    <tr>
-      <td><input type="checkbox" class="row-checkbox" onchange="updateResearchBtn()" data-index="${i}"></td>
-      <td><strong>${p.name}</strong></td>
-      <td style="font-family:monospace;font-size:11px;">${p.cert}</td>
-      <td>${p.company}</td>
-      <td>${hospitalDisplay}</td>
-      <td><span class="badge badge-new">${p.category}</span></td>
-      <td>${provinceDisplay}</td>
-      <td>${p.date}</td>
-      <td><span class="badge ${srcBadgeClass}">${p.source}</span></td>
-      <td>${p.researched ? '<span class="badge badge-done">已调研</span>' : '<span class="badge badge-pending">待调研</span>'}</td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('badge-total').textContent = `共 ${products.length} 条`;
-  document.getElementById('stat-total').textContent = products.length;
-  document.getElementById('stat-new').textContent = products.filter(p => !p.researched).length;
-  document.getElementById('stat-researched').textContent = products.filter(p => p.researched).length;
-  document.getElementById('select-all').checked = false;
-  updateDBStatsDisplay();
-  updateResearchBtn();
-}
-
-async function updateDBStatsDisplay() {
-  const count = await dbCount();
-  document.getElementById('db-count-display').textContent = `共 ${count} 条记录`;
-  const stats = await dbGetStats();
-  document.getElementById('stat-db-total').textContent = stats.total;
-  document.getElementById('stat-db-nmpa').textContent = stats.nmpa;
-  document.getElementById('stat-db-prov').textContent = stats.prov;
-  document.getElementById('stat-db-bid').textContent = stats.bid;
-}
+const mockResearchTemplates = [];
 
 function renderResearchResults() {
   const container = document.getElementById('research-results');
