@@ -1038,6 +1038,122 @@ const mockHospitalBidding = [
 
 const mockResearchTemplates = [];
 
+// ==================== UI Helpers ====================
+function switchCrawlTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-nmpa').style.display = tab === 'nmpa' ? '' : 'none';
+  document.getElementById('tab-provincial').style.display = tab === 'provincial' ? '' : 'none';
+  document.getElementById('tab-hospital').style.display = tab === 'hospital' ? '' : 'none';
+}
+
+function showToast(msg, type) {
+  type = type || 'success';
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, 2800);
+}
+
+function addLog(msg, type) {
+  type = type || 'info';
+  const area = document.getElementById('log-area');
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  const now = new Date();
+  const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  line.textContent = `[${ts}] ${msg}`;
+  area.appendChild(line);
+  area.scrollTop = area.scrollHeight;
+}
+
+function toggleAll(checkbox) {
+  const checked = checkbox.checked;
+  document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = checked; });
+  updateResearchBtn();
+}
+
+function selectAllRows() {
+  const cb = document.getElementById('select-all');
+  cb.checked = !cb.checked;
+  toggleAll(cb);
+}
+
+function updateResearchBtn() {
+  const checked = document.querySelectorAll('.row-checkbox:checked');
+  const btn = document.getElementById('btn-research');
+  if (btn) btn.disabled = checked.length === 0;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('product-table-body');
+  const totalBadge = document.getElementById('badge-total');
+  const totalEl = document.getElementById('stat-total');
+  const newEl = document.getElementById('stat-new');
+  const researchedEl = document.getElementById('stat-researched');
+  const dbTotal = document.getElementById('stat-db-total');
+  const dbNmpa = document.getElementById('stat-db-nmpa');
+  const dbProv = document.getElementById('stat-db-prov');
+  const dbBid = document.getElementById('stat-db-bid');
+  const dbCount = document.getElementById('db-count-display');
+  const selectAll = document.getElementById('select-all');
+
+  if (products.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">📭</div><p>暂无数据，请先执行数据爬取</p></div></td></tr>`;
+    totalBadge.textContent = '共 0 条';
+    totalEl.textContent = '0';
+    newEl.textContent = '0';
+    researchedEl.textContent = '0';
+    dbTotal.textContent = '0';
+    dbNmpa.textContent = '0';
+    dbProv.textContent = '0';
+    dbBid.textContent = '0';
+    if (dbCount) dbCount.textContent = '--';
+    if (selectAll) selectAll.checked = false;
+    updateResearchBtn();
+    return;
+  }
+
+  const nmpaCount = products.filter(p => p.source === 'NMPA').length;
+  const provCount = products.filter(p => p.source && p.source.includes('挂网')).length;
+  const bidCount = products.filter(p => p.source === '医院招标').length;
+  const researchedCount = products.filter(p => p.researched).length;
+  const newCount = products.filter(p => !p.researched).length;
+
+  totalBadge.textContent = `共 ${products.length} 条`;
+  totalEl.textContent = products.length;
+  newEl.textContent = newCount;
+  researchedEl.textContent = researchedCount;
+  dbTotal.textContent = products.length;
+  dbNmpa.textContent = nmpaCount;
+  dbProv.textContent = provCount;
+  dbBid.textContent = bidCount;
+  if (dbCount) dbCount.textContent = products.length;
+  if (selectAll) selectAll.checked = false;
+
+  const sourceLabels = { 'NMPA': '国家药监局', '江苏省挂网': '江苏省挂网', '广东省挂网': '广东省挂网', '浙江省挂网': '浙江省挂网', '山东省挂网': '山东省挂网', '北京市挂网': '北京市挂网', '上海市挂网': '上海市挂网', '四川省挂网': '四川省挂网', '湖北省挂网': '湖北省挂网', '医院招标': '医院招标' };
+  tbody.innerHTML = products.map((p, i) => `
+    <tr>
+      <td><input type="checkbox" class="row-checkbox" data-index="${i}" onchange="updateResearchBtn()"></td>
+      <td>${p.name}</td>
+      <td>${p.cert}</td>
+      <td>${p.company}</td>
+      <td>${p.hospital || '-'}</td>
+      <td>${p.category}</td>
+      <td>${p.province || '-'}</td>
+      <td>${p.date}</td>
+      <td>${sourceLabels[p.source] || p.source}</td>
+      <td><span class="badge ${p.researched ? 'badge-done' : 'badge-pending'}">${p.researched ? '已调研' : '待调研'}</span></td>
+    </tr>
+  `).join('');
+  
+  updateResearchBtn();
+}
+
 function renderResearchResults() {
   const container = document.getElementById('research-results');
   if (researchResults.length === 0) {
