@@ -458,6 +458,10 @@
       <!-- Hospital Tab -->
       <div id="tab-hospital" style="display:none;">
         <div class="form-group">
+          <label class="form-label">搜索关键词</label>
+          <input type="text" class="form-input" id="hospital-keyword" value="医疗设备" placeholder="例如：CT、彩超、耗材...">
+        </div>
+        <div class="form-group">
           <label class="form-label">省份选择</label>
           <select class="form-select" id="hospital-province-select">
             <option value="">全部省份</option>
@@ -472,6 +476,10 @@
             <option>河南省</option>
             <option>福建省</option>
           </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">爬取代理地址 <span style="font-size:10px;color:var(--text-secondary);">(Vercel部署后自动获取)</span></label>
+          <input type="text" class="form-input" id="crawl-api-url" placeholder="留空使用 mock 数据，例如 https://xxx.vercel.app" style="font-size:12px;">
         </div>
         <div class="form-group">
           <label class="form-label">医院类型</label>
@@ -804,6 +812,7 @@ let researchResults = [];
 let currentTab = 'nmpa';
 let crawlBusy = false;
 let researchBusy = false;
+const CRAWL_API = localStorage.getItem('med_crawl_api') || '';
 
 // ==================== Mock Data ====================
 const mockNMPAData = [
@@ -1224,17 +1233,53 @@ async function startCrawl(source) {
     newProducts = data;
     addLog(`${province}挂网平台爬取完成，获取 ${newProducts.length} 条新挂网产品。`, 'success');
   } else if (source === 'hospital') {
+    const keyword = document.getElementById('hospital-keyword').value.trim();
     const provFilter = document.getElementById('hospital-province-select').value;
     const bidType = document.getElementById('bid-category-select').value;
     const startDate = document.getElementById('hospital-start').value;
     const endDate = document.getElementById('hospital-end').value;
-    let data = mockHospitalBidding.map(d => ({ ...d }));
-    if (provFilter) data = data.filter(d => d.province === provFilter.replace('省','').replace('市',''));
-    if (bidType) data = data.filter(d => d.category === bidType);
-    if (startDate) data = data.filter(d => d.date >= startDate);
-    if (endDate) data = data.filter(d => d.date <= endDate);
-    newProducts = data;
-    addLog(`医院招标爬取完成，获取 ${newProducts.length} 条新招标产品。`, 'success');
+
+    // 优先使用真实爬取 API
+    const apiUrl = CRAWL_API || (document.getElementById('crawl-api-url')?.value?.trim() || '');
+    if (apiUrl) {
+      addLog('正在通过代理访问中国政府采购网真实数据...', 'info');
+      const pages = 3; // 爬取前3页
+      for (let pg = 1; pg <= pages; pg++) {
+        let url = `${apiUrl}/api/crawl?kw=${encodeURIComponent(keyword || '医疗设备')}&page_index=${pg}`;
+        if (startDate) url += `&start_time=${encodeURIComponent(startDate)}`;
+        if (endDate) url += `&end_time=${encodeURIComponent(endDate)}`;
+        try {
+          const resp = await fetch(url);
+          if (resp.ok) {
+            const json = await resp.json();
+            if (json.products && json.products.length > 0) {
+              json.products.forEach(p => {
+                p.source = '医院招标';
+                if (provFilter && p.province !== provFilter.replace('省','').replace('市','')) return;
+                if (bidType && !p.category.includes(bidType)) return;
+                newProducts.push(p);
+              });
+              addLog(`第${pg}页获取 ${json.products.length} 条`, 'info');
+            }
+          } else {
+            addLog(`第${pg}页请求失败 (${resp.status})`, 'warn');
+          }
+        } catch (e) {
+          addLog(`第${pg}页网络错误: ${e.message}`, 'warn');
+        }
+      }
+      addLog(`医院招标爬取完成，共获取 ${newProducts.length} 条真实招标数据。`, 'success');
+    } else {
+      // 无代理时降级到 mock 数据
+      addLog('未配置爬取代理，使用本地示例数据。', 'warn');
+      let data = mockHospitalBidding.map(d => ({ ...d }));
+      if (provFilter) data = data.filter(d => d.province === provFilter.replace('省','').replace('市',''));
+      if (bidType) data = data.filter(d => d.category === bidType);
+      if (startDate) data = data.filter(d => d.date >= startDate);
+      if (endDate) data = data.filter(d => d.date <= endDate);
+      newProducts = data;
+      addLog(`医院招标爬取完成，获取 ${newProducts.length} 条示例产品。`, 'success');
+    }
   }
 
   // Write to IndexedDB
@@ -1431,9 +1476,11 @@ function saveApiConfig() {
   const key = document.getElementById('api-key').value.trim();
   const url = document.getElementById('api-base-url').value.trim();
   const model = document.getElementById('api-model').value.trim();
+  const crawlApi = document.getElementById('crawl-api-url')?.value?.trim() || '';
   if (key) localStorage.setItem('med_api_key', key);
   if (url) localStorage.setItem('med_api_base_url', url);
   if (model) localStorage.setItem('med_api_model', model);
+  if (crawlApi) localStorage.setItem('med_crawl_api', crawlApi);
   showToast('API 配置已保存');
 }
 
@@ -1497,9 +1544,12 @@ async function init() {
   const key = localStorage.getItem('med_api_key');
   const url = localStorage.getItem('med_api_base_url');
   const model = localStorage.getItem('med_api_model');
+  const crawlApi = localStorage.getItem('med_crawl_api');
   if (key) document.getElementById('api-key').value = key;
   if (url) document.getElementById('api-base-url').value = url;
   if (model) document.getElementById('api-model').value = model;
+  const el = document.getElementById('crawl-api-url');
+  if (el && crawlApi) el.value = crawlApi;
   if (key || url || model) {
     document.getElementById('api-config-body').style.display = 'block';
     document.getElementById('api-toggle-icon').textContent = '▲';
