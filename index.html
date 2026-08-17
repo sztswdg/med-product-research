@@ -415,6 +415,10 @@
           <label class="form-label">关键词（可选）</label>
           <input type="text" class="form-input" placeholder="输入产品名称/企业名称关键词" id="nmpa-keyword">
         </div>
+        <div class="form-group">
+          <label class="form-label">后端代理地址 <span style="font-size:10px;color:var(--text-secondary);">(优先经服务端绕过瑞数WAF，留空则浏览器直连)</span></label>
+          <input type="text" class="form-input" id="nmpa-api-url" placeholder="http://localhost:3000/api/nmpa 或 Vercel 部署地址" style="font-size:12px;">
+        </div>
         <button class="btn btn-primary btn-block" onclick="startCrawl('nmpa')" id="btn-nmpa">
           开始爬取 NMPA 数据
         </button>
@@ -1288,11 +1292,45 @@ async function startCrawl(source) {
     const pages = 2;
     const pageSize = 20;
 
-    addLog(`NMPA 接口搜索: "${searchValue}", 请求 ${pages} 页`, 'info');
     let nmpaRawItems = [];
     let fetchFailed = false;
+    let proxyUsed = false;
 
-    try {
+    // ---- 1. 优先调用后端代理 API（服务端绕过瑞数 WAF）----
+    const apiEl = document.getElementById('nmpa-api-url');
+    const proxyBase = (apiEl && apiEl.value.trim()) || '';
+    if (proxyBase) {
+      try {
+        const sep = proxyBase.includes('?') ? '&' : '?';
+        const proxyUrl = proxyBase + sep + `year=${encodeURIComponent(year)}&page=1&size=${pages * pageSize}`;
+        addLog(`尝试后端代理: ${proxyUrl}`, 'info');
+        const presp = await fetch(proxyUrl, { signal: AbortSignal.timeout(65000) });
+        if (presp.ok) {
+          const pjson = await presp.json();
+          // 兼容两种返回形态：{code,data:{list}} 或 透传 NMPA 原始 {code,data:{code,data:{list}}}
+          let rawList = null;
+          if (pjson && pjson.data && Array.isArray(pjson.data.list)) rawList = pjson.data.list;
+          else if (pjson && pjson.data && pjson.data.data && Array.isArray(pjson.data.data.list)) rawList = pjson.data.data.list;
+          else if (Array.isArray(pjson)) rawList = pjson;
+          if (rawList && rawList.length > 0) {
+            nmpaRawItems = rawList;
+            proxyUsed = true;
+            addLog(`代理接口返回 ${rawList.length} 条真实数据`, 'success');
+          } else {
+            addLog(`代理接口返回异常 code=${pjson ? pjson.code : '?'} msg=${(pjson && pjson.message) || 'empty list'}`, 'warn');
+          }
+        } else {
+          addLog(`代理接口 HTTP ${presp.status}`, 'warn');
+        }
+      } catch (err) {
+        addLog(`代理接口请求失败: ${err.message}，降级浏览器直连`, 'error');
+      }
+    }
+
+    // ---- 2. 代理未成功时降级浏览器直连 NMPA ----
+    if (!proxyUsed && nmpaRawItems.length === 0) {
+      addLog(`NMPA 接口搜索: "${searchValue}", 请求 ${pages} 页`, 'info');
+      try {
       for (let pg = 1; pg <= pages; pg++) {
         const ts = Date.now();
         const params = {
@@ -1322,9 +1360,10 @@ async function startCrawl(source) {
         }
         if (pg < pages) await new Promise(r => setTimeout(r, NMPA_MIN_INTERVAL));
       }
-    } catch (err) {
-      addLog(`NMPA 接口请求失败: ${err.message}`, 'error');
-      fetchFailed = true;
+      } catch (err) {
+        addLog(`NMPA 接口请求失败: ${err.message}`, 'error');
+        fetchFailed = true;
+      }
     }
 
     if (nmpaRawItems.length === 0) {
@@ -1343,16 +1382,16 @@ async function startCrawl(source) {
     } else {
       let lastReqTime = Date.now();
       for (const item of nmpaRawItems) {
-        const certNo = (item.f0 || '').trim();
-        const company = (item.f1 || '').trim();
-        const productName = (item.f2 || '').trim();
-        const recordId = (item.f3 || '').trim();
+        const certNo = (item.f0 || item.regNo || '').trim();
+        const company = (item.f1 || item.company || '').trim();
+        const productName = (item.f2 || item.name || '').trim();
+        const recordId = (item.f3 || item.id || '').trim();
         let detailDate = '';
         let detailCategory = nmpaCategory(certNo);
         let detailProvince = nmpaProvince(certNo);
 
-        // 尝试调用详情接口获取批准日期和类别
-        if (recordId) {
+        // 尝试调用详情接口获取批准日期和类别（代理模式下服务端已处理，跳过浏览器直连详情）
+        if (recordId && !proxyUsed) {
           const waitMs = NMPA_MIN_INTERVAL - (Date.now() - lastReqTime);
           if (waitMs > 0) await new Promise(r => setTimeout(r, waitMs));
           try {
@@ -1732,6 +1771,13 @@ async function init() {
   if (model) document.getElementById('api-model').value = model;
   const el = document.getElementById('crawl-api-url');
   if (el && crawlApi) el.value = crawlApi;
+  const nmpaEl = document.getElementById('nmpa-api-url');
+  const nmpaApi = localStorage.getItem('med_nmpa_api');
+  if (nmpaEl) {
+    nmpaEl.value = nmpaApi || 'http://localhost:3000/api/nmpa';
+    nmpaEl.addEventListener('change', () => localStorage.setItem('med_nmpa_api', nmpaEl.value.trim()));
+    nmpaEl.addEventListener('input', () => localStorage.setItem('med_nmpa_api', nmpaEl.value.trim()));
+  }
   if (key || url || model) {
     document.getElementById('api-config-body').style.display = 'block';
     document.getElementById('api-toggle-icon').textContent = '▲';
