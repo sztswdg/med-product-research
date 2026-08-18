@@ -605,12 +605,23 @@ async function queryNmpa(keyword, page = 1, size = 20) {
       // 200 但 HTML → 可能也是挑战页（瑞数有时返回 200 挑战）
       const parsed = parseChallengeHtml(text, resp.url || REFERER);
       if (parsed.rsid) {
-        const wlcode = parsed.scriptUrl ? await (await fetch(parsed.scriptUrl, {
-          headers: { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' },
-          signal: AbortSignal.timeout(15000),
-        })).text() : '';
-        const cookieStr = generateRsCookie(parsed.rsid, parsed.metaContent, parsed.tscode, wlcode);
+        let cookieStr = '';
+        try {
+          const wlcode = parsed.scriptUrl ? await (await fetch(parsed.scriptUrl, {
+            headers: { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' },
+            signal: AbortSignal.timeout(15000),
+          })).text() : '';
+          cookieStr = generateRsCookie(parsed.rsid, parsed.metaContent, parsed.tscode, wlcode);
+        } catch (e) {
+          lastError = new Error(`瑞数cookie生成失败: ${e.message}`);
+          console.error('[nmpa] generateRsCookie error:', e);
+          continue;
+        }
         sessionCookies = { ...sessionCookies, ...parseCookiePairs(cookieStr) };
+        if (!cookieStr) {
+          lastError = new Error('瑞数cookie生成为空');
+          continue;
+        }
         continue;
       }
       lastError = new Error('未知 200 响应（非 JSON 也非挑战页）');
@@ -620,11 +631,18 @@ async function queryNmpa(keyword, page = 1, size = 20) {
     if (resp.status === 412) {
       const html = await resp.text();
       const parsed = parseChallengeHtml(html, resp.url || REFERER);
-      const wlcode = parsed.scriptUrl ? await (await fetch(parsed.scriptUrl, {
-        headers: { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' },
-        signal: AbortSignal.timeout(15000),
-      })).text() : '';
-      const cookieStr = generateRsCookie(parsed.rsid, parsed.metaContent, parsed.tscode, wlcode);
+      let cookieStr = '';
+      try {
+        const wlcode = parsed.scriptUrl ? await (await fetch(parsed.scriptUrl, {
+          headers: { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' },
+          signal: AbortSignal.timeout(15000),
+        })).text() : '';
+        cookieStr = generateRsCookie(parsed.rsid, parsed.metaContent, parsed.tscode, wlcode);
+      } catch (e) {
+        lastError = new Error(`瑞数cookie生成失败: ${e.message}`);
+        console.error('[nmpa] generateRsCookie error:', e);
+        continue;
+      }
       sessionCookies = { ...sessionCookies, ...parseCookiePairs(cookieStr) };
       console.log(`[nmpa] 瑞数 cookie 已生成（第 ${attempt + 1} 次），重试...`);
       continue;
