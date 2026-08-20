@@ -417,7 +417,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">后端代理地址 <span style="font-size:10px;color:var(--text-secondary);">(优先经服务端绕过瑞数WAF，留空则浏览器直连)</span></label>
-          <input type="text" class="form-input" id="nmpa-api-url" placeholder="http://localhost:3000/api/nmpa 或 Vercel 部署地址" style="font-size:12px;">
+          <input type="text" class="form-input" id="nmpa-api-url" value="https://bool-replacement-lil-upon.trycloudflare.com" placeholder="后端代理地址，留空则浏览器直连" style="font-size:12px;">
         </div>
         <button class="btn btn-primary btn-block" onclick="startCrawl('nmpa')" id="btn-nmpa">
           开始爬取 NMPA 数据
