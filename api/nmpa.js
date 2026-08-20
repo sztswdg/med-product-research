@@ -569,7 +569,51 @@ async function httpGet(url, headers, cookieMap, timeoutMs = 30000) {
 }
 
 /**
- * 等价于 123.py 的 query()：查 NMPA 数据接口，自动处理瑞数 412 挑战。
+ * HTTP/1.1 请求（绕过瑞数对 HTTP/2 的挑战拦截）
+ * 实测：NMPA 瑞数 WAF 升级后只对 HTTP/2（undici fetch 默认）发起 412 挑战，
+ * HTTP/1.1 请求 + 正确签名可直接拿到业务数据，无需生成瑞数 cookie。
+ */
+const http = require('http');
+const https = require('https');
+
+function http11Request(url, headers, cookieMap, timeoutMs = 30000, redirects = 3) {
+  return new Promise((resolve, reject) => {
+    const u = new URL(url);
+    const h = { ...headers, 'Connection': 'close' };
+    if (cookieMap && Object.keys(cookieMap).length) {
+      h['Cookie'] = Object.entries(cookieMap).map(([k, v]) => `${k}=${v}`).join('; ');
+    }
+    const mod = u.protocol === 'http:' ? http : https;
+    const req = mod.request({
+      hostname: u.hostname,
+      port: u.port || (u.protocol === 'http:' ? 80 : 443),
+      path: u.pathname + u.search,
+      method: 'GET',
+      headers: h,
+      timeout: timeoutMs,
+    }, (res) => {
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
+      res.on('end', () => {
+        const body = Buffer.concat(chunks).toString('utf8');
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location && redirects > 0) {
+          const next = new URL(res.headers.location, url).href;
+          resolve(http11Request(next, headers, cookieMap, timeoutMs, redirects - 1));
+          return;
+        }
+        resolve({ status: res.statusCode, headers: res.headers, body });
+      });
+    });
+    req.on('timeout', () => req.destroy(new Error('请求超时')));
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+/**
+ * 等价于 123.py 的 query()：查 NMPA 数据接口。
+ * 主路径走 HTTP/1.1 + 签名（瑞数只拦截 HTTP/2，1.1 直接放行到业务层）；
+ * 若 WAF 未来升级到连 1.1 也拦截（返回 412/挑战页），自动降级走瑞数 cookie 生成兜底。
  * @returns {Promise<object>} NMPA 原始 JSON
  */
 async function queryNmpa(keyword, page = 1, size = 20) {
@@ -589,10 +633,10 @@ async function queryNmpa(keyword, page = 1, size = 20) {
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     const headers = buildHeaders(params);
-    const resp = await httpGet(url, headers, sessionCookies);
+    const resp = await http11Request(url, headers, sessionCookies);
 
     if (resp.status === 200) {
-      const text = await resp.text();
+      const text = resp.body;
       // JSON 数据直接返回
       if (text.trimStart().startsWith('{')) {
         try {
@@ -603,14 +647,11 @@ async function queryNmpa(keyword, page = 1, size = 20) {
         }
       }
       // 200 但 HTML → 可能也是挑战页（瑞数有时返回 200 挑战）
-      const parsed = parseChallengeHtml(text, resp.url || REFERER);
+      const parsed = parseChallengeHtml(text, resp.headers.location || REFERER);
       if (parsed.rsid) {
         let cookieStr = '';
         try {
-          const wlcode = parsed.scriptUrl ? await (await fetch(parsed.scriptUrl, {
-            headers: { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' },
-            signal: AbortSignal.timeout(15000),
-          })).text() : '';
+          const wlcode = parsed.scriptUrl ? (await http11Request(parsed.scriptUrl, { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' }, null, 15000)).body : '';
           cookieStr = generateRsCookie(parsed.rsid, parsed.metaContent, parsed.tscode, wlcode);
         } catch (e) {
           lastError = new Error(`瑞数cookie生成失败: ${e.message}`);
@@ -629,14 +670,11 @@ async function queryNmpa(keyword, page = 1, size = 20) {
     }
 
     if (resp.status === 412) {
-      const html = await resp.text();
-      const parsed = parseChallengeHtml(html, resp.url || REFERER);
+      const html = resp.body;
+      const parsed = parseChallengeHtml(html, REFERER);
       let cookieStr = '';
       try {
-        const wlcode = parsed.scriptUrl ? await (await fetch(parsed.scriptUrl, {
-          headers: { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' },
-          signal: AbortSignal.timeout(15000),
-        })).text() : '';
+        const wlcode = parsed.scriptUrl ? (await http11Request(parsed.scriptUrl, { 'User-Agent': UA, 'Referer': REFERER, 'Accept': '*/*' }, null, 15000)).body : '';
         cookieStr = generateRsCookie(parsed.rsid, parsed.metaContent, parsed.tscode, wlcode);
       } catch (e) {
         lastError = new Error(`瑞数cookie生成失败: ${e.message}`);
@@ -648,7 +686,7 @@ async function queryNmpa(keyword, page = 1, size = 20) {
       continue;
     }
 
-    lastError = new Error(`请求失败 status=${resp.status} body=${textPreview(await resp.text())}`);
+    lastError = new Error(`请求失败 status=${resp.status} body=${textPreview(resp.body)}`);
     break;
   }
 
@@ -682,6 +720,11 @@ async function handleRequest(req, res) {
 
 // Vercel 导出
 module.exports = handleRequest;
+
+// 本地调试导出（NMPA_DEBUG=1 时启用，不影响 Vercel 运行）
+if (process.env.NMPA_DEBUG) {
+  module.exports = { handleRequest, generateRsCookie, parseChallengeHtml, makeSign, queryNmpa, RS_TEMPLATE, snapshotGlobals, restoreGlobals };
+}
 
 // ==================== 本地运行 ====================
 if (require.main === module) {
